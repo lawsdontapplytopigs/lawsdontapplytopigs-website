@@ -12,9 +12,20 @@
 <body>
     <div id="elm-node"></div>
     <script>
-        let elm = Elm.Main.init({
-            node: document.getElementById("elm-node")
+        const elm = Elm.Main.init({
+            node: document.getElementById("elm-node"),
+            flags: {
+                width : window.innerWidth, 
+                height: window.innerHeight 
+            }
         });
+
+        window.onresize = () => {
+            elm.ports.windowData.send({
+                width : window.innerWidth,
+                height : window.innerHeight,
+            });
+        };
     </script>
 </body>
 </html>

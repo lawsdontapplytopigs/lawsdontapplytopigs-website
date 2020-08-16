@@ -28,9 +28,13 @@ view title model =
 
 
 mainCol model =
-    -- let
-        
-    -- in
+    let
+        imgSize =
+            if model.viewportGeometry.height < 700 then
+                model.viewportGeometry.height
+            else
+                700
+    in
     E.column
         [ E.width E.fill
         , EFont.family
@@ -43,8 +47,8 @@ mainCol model =
             -- , EBackground.color <| E.rgb255 255 225 246
             -- , EBackground.color <| E.rgb255 255 135 172
             -- , E.paddingXY Palette.spacing1 Palette.spacing4
-            , E.spacing (0 - (Palette.spacing4* 2))
-            , E.height <| E.px 700
+            -- , E.spacing (0 - 520)
+            , E.height <| E.px imgSize
             -- , EBackground.color <| E.rgb255 80 80 80
             ]
             [ E.el
@@ -61,7 +65,7 @@ mainCol model =
                 --         ]
                 [ E.inFront
                     <| E.image
-                        [ E.height <| E.px 700
+                        [ E.height <| E.px imgSize
                         -- , E.width <| E.px 180
                         , E.centerY
                         , E.centerX
@@ -70,29 +74,36 @@ mainCol model =
                         { src = "./pog.jpg"
                         , description = "fat pog"
                         }
-                , E.width <| E.px 700
-                , E.height <| E.px 700
-                , E.centerY
-                , E.centerX
+                , E.width <| E.px imgSize
+                , E.height <| E.px imgSize
+                -- , E.centerY
+                -- , E.centerX
                 , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
                 , E.alignLeft
+                -- , EBackground.color <| E.rgb255 80 80 80
                 ]
                 <| E.none
-            , E.column
-                [ EFont.size Palette.fontSize3
-                , E.centerX
-                -- , EBackground.color <| E.rgb255 20 20 20
-                -- , EFont.color <| E.rgb255 255 255 255
-                , EFont.medium
+            , E.el
+                [ E.width E.fill
+                , E.height E.fill
+                , EBackground.color <| E.rgb255 80 80 80
                 ]
-                [ E.paragraph
-                    [ E.centerX
-                    -- , EBackground.color <| E.rgb255 80 80 80
-                    , E.htmlAttribute <| Html.Attributes.style "text-align" "center"
+                <| E.column
+                    [ EFont.size Palette.fontSize3
+                    -- , E.centerX
+                    -- , EBackground.color <| E.rgb255 20 20 20
+                    -- , EFont.color <| E.rgb255 255 255 255
+                    , EFont.medium
                     ]
-                    [ E.text "Hi, my name is Adrian. I design and create website frontends."
+                    [ E.paragraph
+                        -- [ E.centerX
+                        [
+                        -- , E.htmlAttribute <| Html.Attributes.style "text-align" "center"
+                        -- , EBackground.color <| E.rgb255 80 80 80
+                        ]
+                        [ E.text "Hi, my name is Adrian. I design and create website frontends."
+                        ]
                     ]
-                ]
             ]
         , viewProjects model
         ]
