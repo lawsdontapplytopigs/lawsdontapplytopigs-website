@@ -39,9 +39,9 @@ mainCol model =
                 model.viewportGeometry.height
             else
                 680
-        imageSizeRatioBreakpoint = 1.334
+        imageSizeRatioBreakpoint = 1.574
         widthOrHeight = 
-            if (((toFloat model.viewportGeometry.width) / 2 ) / (toFloat model.viewportGeometry.height)) < imageSizeRatioBreakpoint then
+            if (((toFloat model.viewportGeometry.width) / 2 ) / (toFloat imgSize)) < imageSizeRatioBreakpoint then
                 E.height <| E.px imgSize
             else
                 E.width <| E.px (round ((toFloat model.viewportGeometry.width) / 2))
@@ -106,7 +106,6 @@ mainCol model =
                         , E.width E.fill
                         ]
                         <| desktopNavbar model
-
                 ]
                 <| E.column
                     [ EFont.size Palette.fontSize4
@@ -126,6 +125,7 @@ mainCol model =
                         <| E.column
                             [ E.alignBottom
                             , E.spacing 10
+                            , E.paddingEach { top = 0, right = 20, bottom = 0, left = 0 }
                             ]
                             [ E.paragraph
                                 -- , E.htmlAttribute <| Html.Attributes.style "text-align" "center"
@@ -175,39 +175,67 @@ mainCol model =
         , viewProjects model
         ]
 
-viewProjects model =
-    E.column
-        [ E.centerX
-        , E.spacing Palette.spacing2
-        , EBackground.color <| E.rgb255 80 80 80
-        ]
-        [ E.el 
-            [ E.centerX
-            , EBackground.color <| E.rgb255 80 80 80
-            ]
-            <| E.paragraph
-                [ EFont.size Palette.fontSize5
-                , EFont.bold
-                -- , EFont.italic
-                , EFont.letterSpacing 1
-                -- , EBackground.color <| E.rgb255 80 80 80
-                -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
-                ]
-                [ E.text "My latest work"
-                ]
-        , E.column
-            [ E.width E.fill
-            ]
-            [ viewPost
-                "./0.png"
-                "Sewerslvt website concept"
-                "https://eloquent-turing-60c6e0.netlify.app/"
-                "https://github.com/lawsdontapplytopigs/Sewer"
-                """In the span of 3 months I challenged my comfort zone and decided to make a windows95 themed website for the electronic music artist Sewerslvt."""
-            ]
-        ]
+truncateDescription desc =
+    if String.length desc > 120 then
+        (String.left 120 desc) ++ "..."
+    else
+        desc
 
-viewPost imgSrc title livePreviewLink githubLink text =
+viewProjects model =
+    E.el
+        [ E.height <| E.px 680
+        -- , EBackground.color <| E.rgb255 80 80 80
+        , E.width E.fill
+        ]
+        <| E.column
+            [ E.centerY
+            , E.centerX
+            , E.spacing <| Palette.spacing2 + Palette.spacing1
+            -- , EBackground.color <| Palette.color1
+            ]
+            [ E.el 
+                [ E.centerX
+                -- , EBackground.color <| E.rgb255 80 80 80
+                ]
+                <| E.paragraph
+                    [ EFont.size Palette.fontSize6
+                    , EFont.bold
+                    -- , EFont.italic
+                    , EFont.letterSpacing 1
+                    -- , EBackground.color <| E.rgb255 80 80 80
+                    -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
+                    ]
+                    [ E.text "My latest work"
+                    ]
+            , E.row
+                [ E.width E.fill
+                , E.spacing 40
+                ]
+                [ E.el [ E.alignTop ] <| viewPost
+                    "./0.png"
+                    "Sewerslvt website concept"
+                    "https://eloquent-turing-60c6e0.netlify.app/"
+                    "https://github.com/lawsdontapplytopigs/Sewer"
+                    (truncateDescription """In the span of 3 months I challenged my comfort zone and decided to make a windows95 themed website for the electronic music artist Sewerslvt.""")
+                    "/sewerslvt"
+                , E.el [ E.alignTop ] <| viewPost
+                    "./1.png"
+                    "Waneella landing page"
+                    "https://musing-williams-2e3d7d.netlify.app/"
+                    "https://github.com/lawsdontapplytopigs/waneella_site"
+                    (truncateDescription """In 1 week I designed a (yet unfinished) concept landing page for Waneella, a popular pixel artist.""")
+                    "/waneella"
+                , E.el [ E.alignTop ] <| viewPost
+                    "./2.png"
+                    "AwesomeWM website concept"
+                    "https://jovial-lovelace-8eb5a0.netlify.app/"
+                    "https://github.com/lawsdontapplytopigs/awesomewm_website"
+                    (truncateDescription """In the span of 2 months I took it upon myself to try to solve one of the biggest problems the AwesomeWM project was facing: accurately portraying the graphical capabilities of the window manager.""")
+                    "/awesomewm"
+                ]
+            ]
+
+viewPost imgSrc title livePreviewLink githubLink text viewProjectLink=
     E.column
         [ E.width <| E.maximum 400 E.fill
         , E.centerX
@@ -276,6 +304,15 @@ viewPost imgSrc title livePreviewLink githubLink text =
             ]
             [ E.text text
             ]
+        , E.newTabLink 
+            [ EFont.size Palette.fontSize0
+            , EFont.semiBold
+            , E.paddingEach {top = 5, right = 0, bottom = 0, left = 0}
+            ]
+            { url = viewProjectLink
+            , label = 
+                E.el [ E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"  ] <| E.text "view project"
+            }
         ]
 
 candyBg =
@@ -307,7 +344,6 @@ candyBg =
                     ]
                     []
                 ]
-            
     in
     Svg.svg
         [ Svg.Attributes.viewBox "0 0 200 200"
@@ -350,9 +386,12 @@ regularRoundedButton text msg =
         [ EBorder.width 3
         -- , E.htmlAttribute <| Html.Attributes.style "border-radius" "50%"
         , EBorder.rounded 99999999
+        , EBackground.color <| E.rgb255 255 255 255
         ]
         { onPress = Just msg
-        , label = E.el [ E.paddingXY 20 10 ] <| E.text text
+        , label = E.el 
+            [ E.paddingXY 20 10 
+            ] <| E.text text
         }
 
 
