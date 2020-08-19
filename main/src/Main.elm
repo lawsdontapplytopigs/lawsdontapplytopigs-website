@@ -49,7 +49,7 @@ update msg model =
             let
                 newM = 
                     { model
-                        | debug = Debug.log "" str
+                        | debug = str
                     }
             in
             (newM, Cmd.none)
