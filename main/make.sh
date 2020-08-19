@@ -14,7 +14,7 @@ cp "$PREBUILT_DIR/index.html" "$BUILT_DIR/"
 cp "$PREBUILT_DIR/pog.jpg" "$BUILT_DIR/"
 cp "$PREBUILT_DIR/0.png" "$BUILT_DIR/"
 
-
+cp -r "$PREBUILT_DIR/fonts" "$BUILT_DIR/"
 
 
 

@@ -4,12 +4,18 @@ import Element as E
 import Element.Background as EBackground
 import Element.Border as EBorder
 import Element.Font as EFont
+import Element.Input as EInput
 
 import Html
 import Html.Attributes
 import Icons
 
+import Msg
+
 import Palette
+
+import Svg
+import Svg.Attributes
 
 
 view title model =
@@ -26,28 +32,35 @@ view title model =
         , body = [ body ]
         }
 
-
 mainCol model =
     let
         imgSize =
-            if model.viewportGeometry.height < 700 then
+            if model.viewportGeometry.height < 680 then
                 model.viewportGeometry.height
             else
-                700
+                680
+        imageSizeRatioBreakpoint = 1.334
+        widthOrHeight = 
+            if (((toFloat model.viewportGeometry.width) / 2 ) / (toFloat model.viewportGeometry.height)) < imageSizeRatioBreakpoint then
+                E.height <| E.px imgSize
+            else
+                E.width <| E.px (round ((toFloat model.viewportGeometry.width) / 2))
     in
     E.column
         [ E.width E.fill
         , EFont.family
             [ EFont.typeface Palette.font0
+            -- , EFont.typeface "Roboto"
             ]
         ]
         [ E.row
             [ E.width E.fill
             -- , E.height <| E.px 300
             -- , EBackground.color <| E.rgb255 255 225 246
+            -- , EBackground.color <| E.rgb255 255 220 234
             -- , EBackground.color <| E.rgb255 255 135 172
             -- , E.paddingXY Palette.spacing1 Palette.spacing4
-            -- , E.spacing (0 - 520)
+            , E.spacing Palette.spacing2
             , E.height <| E.px imgSize
             -- , EBackground.color <| E.rgb255 80 80 80
             ]
@@ -65,44 +78,98 @@ mainCol model =
                 --         ]
                 [ E.inFront
                     <| E.image
-                        [ E.height <| E.px imgSize
-                        -- , E.width <| E.px 180
-                        , E.centerY
+                        -- [ E.height <| E.px imgSize
+                        [ widthOrHeight
                         , E.centerX
                         , E.htmlAttribute <| Html.Attributes.style "right" "25px"
+                        , E.alignTop
                         ]
                         { src = "./pog.jpg"
                         , description = "fat pog"
                         }
-                , E.width <| E.px imgSize
+                , E.width E.fill
                 , E.height <| E.px imgSize
                 -- , E.centerY
                 -- , E.centerX
                 , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
                 , E.alignLeft
+                , E.alignTop
                 -- , EBackground.color <| E.rgb255 80 80 80
                 ]
                 <| E.none
             , E.el
                 [ E.width E.fill
                 , E.height E.fill
-                , EBackground.color <| E.rgb255 80 80 80
+                , E.inFront
+                    <| E.el 
+                        [ E.alignTop
+                        , E.width E.fill
+                        ]
+                        <| desktopNavbar model
+
                 ]
                 <| E.column
-                    [ EFont.size Palette.fontSize3
-                    -- , E.centerX
+                    [ EFont.size Palette.fontSize4
+                    , E.centerY
                     -- , EBackground.color <| E.rgb255 20 20 20
                     -- , EFont.color <| E.rgb255 255 255 255
-                    , EFont.medium
+                    -- , EFont.color Palette.color1
+                    , E.height E.fill
+                    , E.width E.fill
                     ]
-                    [ E.paragraph
-                        -- [ E.centerX
-                        [
-                        -- , E.htmlAttribute <| Html.Attributes.style "text-align" "center"
+                    [ E.el
+                        [ E.width E.fill
                         -- , EBackground.color <| E.rgb255 80 80 80
+                        , E.height E.fill
+                        , EFont.semiBold
                         ]
-                        [ E.text "Hi, my name is Adrian. I design and create website frontends."
+                        <| E.column
+                            [ E.alignBottom
+                            , E.spacing 10
+                            ]
+                            [ E.paragraph
+                                -- , E.htmlAttribute <| Html.Attributes.style "text-align" "center"
+                                -- , EBackground.color <| E.rgb255 80 80 80
+                                [
+                                ]
+                                [ E.text "Hi, my name is Adrian."
+                                ]
+                            , E.paragraph
+                                -- , E.htmlAttribute <| Html.Attributes.style "text-align" "center"
+                                -- , EBackground.color <| E.rgb255 80 80 80
+                                [
+                                ]
+                                [ E.text "I design and create website frontends."
+                                ]
+                            ]
+                    , E.el
+                        [ E.height E.fill
+                        , E.width E.fill
                         ]
+                        <| E.column
+                            [ E.spacing 10
+                            , E.paddingEach { top = 80, right = 0, bottom = 0, left = 0 }
+                            ]
+                            [ E.paragraph
+                                [ EFont.family
+                                    [ EFont.typeface Palette.font1
+                                    ]
+                                -- , EFont.color Palette.color1
+                                , EFont.size 42
+                                , EFont.regular
+                                , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
+                                ]
+                                [ E.text "Available for hire!"
+                                ]
+                            , E.row
+                                [ EFont.size Palette.fontSize0
+                                , EFont.medium
+                                , E.spacing Palette.spacing0
+                                ]
+                                [ solidRoundedButton "contact me" Msg.NoOp
+                                , regularRoundedButton "See my work" Msg.NoOp
+                                ]
+                            ]
                     ]
             ]
         , viewProjects model
@@ -112,19 +179,21 @@ viewProjects model =
     E.column
         [ E.centerX
         , E.spacing Palette.spacing2
-        -- , EBackground.color <| E.rgb255 80 80 80
+        , EBackground.color <| E.rgb255 80 80 80
         ]
         [ E.el 
             [ E.centerX
+            , EBackground.color <| E.rgb255 80 80 80
             ]
             <| E.paragraph
-                [ EFont.size Palette.fontSize3
+                [ EFont.size Palette.fontSize5
                 , EFont.bold
                 -- , EFont.italic
+                , EFont.letterSpacing 1
                 -- , EBackground.color <| E.rgb255 80 80 80
                 -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
                 ]
-                [ E.text "My projects"
+                [ E.text "My latest work"
                 ]
         , E.column
             [ E.width E.fill
@@ -208,5 +277,164 @@ viewPost imgSrc title livePreviewLink githubLink text =
             [ E.text text
             ]
         ]
+
+candyBg =
+    let
+        numberOfBarPairs = 20
+        maxH = 400
+        barW = 10
+
+        drawBarPair ind makeBarPairFunc =
+            makeBarPairFunc (ind*barW*2)
+        makeBarPair xPos =
+            Svg.g
+                [
+                ]
+                [ Svg.rect
+                    [ Svg.Attributes.x <| String.fromInt xPos
+                    , Svg.Attributes.y "0"
+                    , Svg.Attributes.width <| String.fromInt barW
+                    , Svg.Attributes.height (String.fromInt maxH)
+                    , Svg.Attributes.fill "#ffffff"
+                    ]
+                    []
+                , Svg.rect
+                    [ Svg.Attributes.x <| String.fromInt (xPos + barW)
+                    , Svg.Attributes.y "0"
+                    , Svg.Attributes.width <| String.fromInt barW
+                    , Svg.Attributes.height (String.fromInt maxH)
+                    , Svg.Attributes.fill "#ff3168"
+                    ]
+                    []
+                ]
+            
+    in
+    Svg.svg
+        [ Svg.Attributes.viewBox "0 0 200 200"
+        , Svg.Attributes.width "400"
+        , Svg.Attributes.height "400"
+        ]
+        [ Svg.g
+            [ Svg.Attributes.transform "rotate(-25)"
+            ]
+            <| List.indexedMap drawBarPair (List.repeat numberOfBarPairs makeBarPair)
+        ]
+
+candyRoundedButton text msg =
+    EInput.button
+        -- , E.htmlAttribute <| Html.Attributes.style "border-radius" "50%"
+        -- , E.width <| E.px 180
+        -- , E.height <| E.px 60
+        [
+        ]
+        { onPress = Just msg
+        , label = 
+            E.el
+                [ E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
+                , E.paddingXY 20 10 
+                , EBorder.rounded 99999999
+                , EBorder.width 3
+                ]
+                <| E.el 
+                    [ E.behindContent
+                        <| E.el
+                            [ E.htmlAttribute <| Html.Attributes.style "transform" "translate(-120px, -80px)"
+                            ]
+                            <| E.html candyBg
+                    ]
+                    <| E.text text
+        }
+
+regularRoundedButton text msg =
+    EInput.button
+        [ EBorder.width 3
+        -- , E.htmlAttribute <| Html.Attributes.style "border-radius" "50%"
+        , EBorder.rounded 99999999
+        ]
+        { onPress = Just msg
+        , label = E.el [ E.paddingXY 20 10 ] <| E.text text
+        }
+
+
+solidRoundedButton text msg =
+    EInput.button
+        [ EBorder.width 0
+        -- , E.htmlAttribute <| Html.Attributes.style "border-radius" "50%"
+        , EBorder.rounded 99999999
+        -- , EBackground.color Palette.color1
+        , EBackground.color Palette.black
+        ]
+        { onPress = Just msg
+        , label = E.el 
+            [ E.paddingXY 23 13
+            , EFont.color Palette.white
+            ]
+            <| E.text text
+        }
+
+
+desktopNavbar model =
+    let
+        makeLink label_ msg_ =
+            EInput.button
+                [ 
+                ]
+                { onPress = Just msg_
+                , label = E.el 
+                    [
+                    ]
+                    <| E.text label_
+                }
+
+        makeIconLink icon_ url_ =
+            E.newTabLink 
+                []
+                { url = url_
+                , label = 
+                    E.el
+                        [ E.height <| E.px 16
+                        , E.width <| E.px 16
+                        ]
+                        <| E.html <| icon_
+                }
+    in
+    E.row
+        [ E.width E.fill
+        , E.height <| E.px 70
+        -- , EBackground.color Palette.color1
+        ]
+        [ E.row
+            -- [ EBackground.color Palette.color1
+            [ E.spacing 10
+            ]
+            [ makeIconLink Icons.github "https://github.com/lawsdontapplytopigs"
+            , E.el
+                [ E.htmlAttribute <| Html.Attributes.style "transform" "scale(1.2)"
+                ]
+                <| makeIconLink Icons.gmail "mailto:lawsdontapplytopigs@gmail.com"
+
+            ]
+        , E.row
+            [ EFont.size Palette.fontSize0
+            , EFont.medium
+            , E.spacing 30
+            , E.alignRight
+            ]
+            [ makeLink "Work" Msg.NoOp
+            , makeLink "About" Msg.NoOp
+            , makeLink "Contact" Msg.NoOp
+            ]
+        , E.el
+            [ E.paddingEach { top = 0, right = 30, bottom = 0, left = 30 }
+            , E.alignRight
+            ]
+            <| E.el
+                [ E.width <| E.px 48
+                , E.height <| E.px 48
+                ]
+                <| E.html Icons.logo
+        ]
+
+
 
 
