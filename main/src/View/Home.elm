@@ -1,4 +1,4 @@
-module View exposing (view)
+module View.Home exposing (view)
 
 import Element as E
 import Element.Background as EBackground
@@ -294,22 +294,21 @@ aboutMeBlock model =
                         ]
                     ]
                 ]
+
             , E.el
                 -- , EBackground.color <| E.rgb255 20 200 12
-                -- [ E.width <| E.px (60*5) -- doing this because the original file was 60x60px
-                -- , E.height <| E.px (60*5) -- doing this because the original file was 60x60px
+                [ E.width <| E.px (60*5) -- doing this because the original file was 60x60px
+                , E.height <| E.px (60*5) -- doing this because the original file was 60x60px
                 -- , EBackground.color  <| E.rgb255 80 80 80
-                [ E.height <| E.px 320
-                , E.width <| E.px 200
                 ]
                 <| E.el
                     -- [ E.height <| E.px 200
                     -- , E.width <| E.px 200
-                    -- [ E.htmlAttribute <| Html.Attributes.style "transform" "scale(5)"
-                    [ E.centerX
+                    [ E.htmlAttribute <| Html.Attributes.style "transform" "scale(5)"
+                    , E.centerX
                     , E.centerY
                     ]
-                    <| E.html Icons.codePanelBackground
+                    <| E.html (Icons.logo "#000000")
             ]
 
 contactMeBlock model =
@@ -458,7 +457,7 @@ viewPost imgSrc title livePreviewLink githubLink text viewProjectLink =
             ]
             [ E.text text
             ]
-        , E.newTabLink 
+        , E.newTabLink
             [ EFont.size Palette.fontSize0
             , EFont.semiBold
             , E.paddingEach {top = 5, right = 0, bottom = 0, left = 0}
@@ -637,7 +636,11 @@ desktopNavbar model =
         ]
 
 
--- dopeSMatter nestedGeometry model =
+
+
+
+
+-- dopeSvgSpinningBall nestedGeometry model =
 --     let
 --         width = nestedGeometry.width
 --         height = nestedGeometry.height
