@@ -14,8 +14,8 @@ import Msg
 
 import Palette
 
-import Svg
-import Svg.Attributes
+import Svg as S
+import Svg.Attributes as SA
 
 
 view title model =
@@ -173,6 +173,8 @@ mainCol model =
                     ]
             ]
         , viewProjects model
+        , aboutMeBlock model
+        , contactMeBlock model
         ]
 
 truncateDescription desc =
@@ -182,32 +184,32 @@ truncateDescription desc =
         desc
 
 viewProjects model =
-    E.el
-        [ E.height <| E.px 680
-        -- , EBackground.color <| E.rgb255 80 80 80
-        , E.width E.fill
+    E.column
+        [ E.width E.fill
+        , E.paddingXY 0 Palette.spacing4
+        , E.spacing Palette.spacing3
         ]
-        <| E.column
+        [ E.el 
+            [ E.centerX
+            -- , EBackground.color <| E.rgb255 80 80 80
+            , E.htmlAttribute <| Html.Attributes.id "latest-work-section"
+            ]
+            <| E.paragraph
+                [ EFont.size Palette.fontSize6
+                , EFont.bold
+                -- , EFont.italic
+                , EFont.letterSpacing 1
+                -- , EBackground.color <| E.rgb255 80 80 80
+                -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
+                ]
+                [ E.text "My latest work"
+                ]
+        , E.column
             [ E.centerY
             , E.centerX
-            , E.spacing <| Palette.spacing2 + Palette.spacing1
             -- , EBackground.color <| Palette.color1
             ]
-            [ E.el 
-                [ E.centerX
-                -- , EBackground.color <| E.rgb255 80 80 80
-                ]
-                <| E.paragraph
-                    [ EFont.size Palette.fontSize6
-                    , EFont.bold
-                    -- , EFont.italic
-                    , EFont.letterSpacing 1
-                    -- , EBackground.color <| E.rgb255 80 80 80
-                    -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
-                    ]
-                    [ E.text "My latest work"
-                    ]
-            , E.row
+            [ E.row
                 [ E.width E.fill
                 , E.spacing 40
                 ]
@@ -234,8 +236,160 @@ viewProjects model =
                     "/awesomewm"
                 ]
             ]
+        ]
 
-viewPost imgSrc title livePreviewLink githubLink text viewProjectLink=
+aboutMeBlock model =
+    E.el
+        -- [ E.height <| E.px 480
+        [ E.paddingXY 0 Palette.spacing4
+        -- , EBackground.color <| E.rgb255 0 0 0
+        , E.width E.fill
+        ]
+        <| E.row
+            [ E.width <| E.maximum 780 E.fill
+            -- , EFont.color <| E.rgb255 255 255 255
+            -- , EBackground.color <| E.rgb255 120 12 20
+            , E.centerX
+            , E.centerY
+            , E.spacing Palette.spacing2
+            ]
+            [ E.column
+                [ E.width <| E.fillPortion 172
+                , E.spacing Palette.spacing2
+                ]
+                [ E.el
+                    -- [ EFont.size Palette.fontSize4
+                    -- , EFont.semiBold
+                    -- ]
+
+                    -- [ EFont.family
+                    --     [ EFont.typeface Palette.font1
+                    --     ]
+                    -- -- , EFont.color Palette.color1
+                    -- , EFont.size 42
+                    -- , EFont.regular
+                    -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
+                    -- ]
+
+                    [ EFont.size Palette.fontSize2
+                    , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
+                    , EFont.bold
+                    , EFont.letterSpacing 2
+                    ]
+                    <| E.text "About me"
+                , E.textColumn
+                    [ E.spacing Palette.spacing1
+                    , EFont.letterSpacing 0.5
+                    , EFont.size Palette.fontSize0
+                    ]
+                    [ E.paragraph
+                        [
+                        ]
+                        [ E.text """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mauris urna, bibendum nec augue vitae, vulputate tempus leo. """
+                        ]
+                    , E.paragraph
+                        [
+                        ]
+                        [ E.text """Nam venenatis semper lorem. Cras imperdiet erat mauris, vitae fermentum tellus venenatis vel. Fusce semper scelerisque lorem, id tristique dui facilisis in. Sed ultrices viverra egestas. Aliquam rutrum eros et blandit ultrices. """
+                        ]
+                    ]
+                ]
+            , E.el
+                -- , EBackground.color <| E.rgb255 20 200 12
+                -- [ E.width <| E.px (60*5) -- doing this because the original file was 60x60px
+                -- , E.height <| E.px (60*5) -- doing this because the original file was 60x60px
+                -- , EBackground.color  <| E.rgb255 80 80 80
+                [ E.height <| E.px 320
+                , E.width <| E.px 200
+                ]
+                <| E.el
+                    -- [ E.height <| E.px 200
+                    -- , E.width <| E.px 200
+                    -- [ E.htmlAttribute <| Html.Attributes.style "transform" "scale(5)"
+                    [ E.centerX
+                    , E.centerY
+                    ]
+                    <| E.html Icons.codePanelBackground
+            ]
+
+contactMeBlock model =
+    E.el
+        -- [ E.height <| E.px 480
+        [ E.paddingXY 0 Palette.spacing4
+        -- , EBackground.color <| E.rgb255 0 0 0
+        , E.width E.fill
+        ]
+        <| E.row
+            [ E.width <| E.maximum 780 E.fill
+            -- , EFont.color <| E.rgb255 255 255 255
+            -- , EBackground.color <| E.rgb255 120 12 20
+            , E.centerX
+            , E.centerY
+            , E.spacing Palette.spacing2
+            ]
+            [ E.el
+                -- , EBackground.color <| E.rgb255 20 200 12
+                [ E.width <| E.px (60*5) -- doing this because the original file was 60x60px
+                , E.height <| E.px (60*5) -- doing this because the original file was 60x60px
+                -- , EBackground.color  <| E.rgb255 80 80 80
+                ]
+                <| E.el
+                    -- [ E.height <| E.px 200
+                    -- , E.width <| E.px 200
+                    [ E.htmlAttribute <| Html.Attributes.style "transform" "scale(5)"
+                    , E.centerX
+                    , E.centerY
+                    ]
+                    <| E.html (Icons.logo "#000000")
+            , E.column
+                [ E.width <| E.fillPortion 172
+                , E.spacing Palette.spacing2
+                ]
+                [ E.el
+                    [ E.width E.fill
+                    ]
+                    <| E.el
+                    -- [ EFont.size Palette.fontSize4
+                    -- , EFont.semiBold
+                    -- ]
+
+                    -- [ EFont.family
+                    --     [ EFont.typeface Palette.font1
+                    --     ]
+                    -- -- , EFont.color Palette.color1
+                    -- , EFont.size 42
+                    -- , EFont.regular
+                    -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
+                    -- ]
+
+                        [ EFont.size Palette.fontSize2
+                        , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
+                        , EFont.bold
+                        , EFont.letterSpacing 2
+                        , E.alignRight
+                        ]
+                        <| E.text "Contact me"
+                , E.textColumn
+                    [ E.spacing Palette.spacing1
+                    , EFont.letterSpacing 0.5
+                    , EFont.size Palette.fontSize0
+                    , E.htmlAttribute <| Html.Attributes.style "text-align" "right"
+                    ]
+                    [ E.paragraph
+                        [
+                        ]
+                        [ E.text """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mauris urna, bibendum nec augue vitae, vulputate tempus leo. """
+                        ]
+                    , E.paragraph
+                        [
+                        ]
+                        [ E.text """Nam venenatis semper lorem. Cras imperdiet erat mauris, vitae fermentum tellus venenatis vel. Fusce semper scelerisque lorem, id tristique dui facilisis in. Sed ultrices viverra egestas. Aliquam rutrum eros et blandit ultrices. """
+                        ]
+                    ]
+                ]
+            ]
+
+viewPost imgSrc title livePreviewLink githubLink text viewProjectLink =
     E.column
         [ E.width <| E.maximum 400 E.fill
         , E.centerX
@@ -250,7 +404,7 @@ viewPost imgSrc title livePreviewLink githubLink text viewProjectLink=
                     [ E.width <| E.px 400
                     ]
                     { src = imgSrc
-                    , description = "uhh"
+                    , description = "project preview image"
                     }
             }
         , E.paragraph
@@ -311,7 +465,15 @@ viewPost imgSrc title livePreviewLink githubLink text viewProjectLink=
             ]
             { url = viewProjectLink
             , label = 
-                E.el [ E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"  ] <| E.text "view project"
+                E.el 
+                    [ E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"  
+                    -- , EFont.color <| E.rgb255 85 35 72
+            -- , EBackground.color <| E.rgb255 255 225 246
+
+            -- , EBackground.color <| E.rgb255 255 220 234
+            -- , EBackground.color <| E.rgb255 255 135 172
+                    ]
+                    <| E.text "view project"
             }
         ]
 
@@ -324,34 +486,34 @@ candyBg =
         drawBarPair ind makeBarPairFunc =
             makeBarPairFunc (ind*barW*2)
         makeBarPair xPos =
-            Svg.g
+            S.g
                 [
                 ]
-                [ Svg.rect
-                    [ Svg.Attributes.x <| String.fromInt xPos
-                    , Svg.Attributes.y "0"
-                    , Svg.Attributes.width <| String.fromInt barW
-                    , Svg.Attributes.height (String.fromInt maxH)
-                    , Svg.Attributes.fill "#ffffff"
+                [ S.rect
+                    [ SA.x <| String.fromInt xPos
+                    , SA.y "0"
+                    , SA.width <| String.fromInt barW
+                    , SA.height (String.fromInt maxH)
+                    , SA.fill "#ffffff"
                     ]
                     []
-                , Svg.rect
-                    [ Svg.Attributes.x <| String.fromInt (xPos + barW)
-                    , Svg.Attributes.y "0"
-                    , Svg.Attributes.width <| String.fromInt barW
-                    , Svg.Attributes.height (String.fromInt maxH)
-                    , Svg.Attributes.fill "#ff3168"
+                , S.rect
+                    [ SA.x <| String.fromInt (xPos + barW)
+                    , SA.y "0"
+                    , SA.width <| String.fromInt barW
+                    , SA.height (String.fromInt maxH)
+                    , SA.fill "#ff3168"
                     ]
                     []
                 ]
     in
-    Svg.svg
-        [ Svg.Attributes.viewBox "0 0 200 200"
-        , Svg.Attributes.width "400"
-        , Svg.Attributes.height "400"
+    S.svg
+        [ SA.viewBox "0 0 200 200"
+        , SA.width "400"
+        , SA.height "400"
         ]
-        [ Svg.g
-            [ Svg.Attributes.transform "rotate(-25)"
+        [ S.g
+            [ SA.transform "rotate(-25)"
             ]
             <| List.indexedMap drawBarPair (List.repeat numberOfBarPairs makeBarPair)
         ]
@@ -416,7 +578,7 @@ desktopNavbar model =
     let
         makeLink label_ msg_ =
             EInput.button
-                [ 
+                [
                 ]
                 { onPress = Just msg_
                 , label = E.el 
@@ -471,8 +633,27 @@ desktopNavbar model =
                 [ E.width <| E.px 48
                 , E.height <| E.px 48
                 ]
-                <| E.html Icons.logo
+                <| E.html (Icons.logo "#000000")
         ]
+
+
+-- dopeSMatter nestedGeometry model =
+--     let
+--         width = nestedGeometry.width
+--         height = nestedGeometry.height
+--     in
+--     S.svg
+--         [ SA.version "1.1"
+--         , SA.x "0px"
+--         , SA.y "0px"
+--         , SA.viewBox <| "0 0 " ++ (String.fromInt width) ++ " " ++ (String.fromInt height)
+--         ]
+--         [ 
+--         ]
+
+
+
+
 
 
 
