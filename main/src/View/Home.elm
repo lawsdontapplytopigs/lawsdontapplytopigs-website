@@ -1,5 +1,7 @@
 module View.Home exposing (view)
 
+
+import Animator
 import Element as E
 import Element.Background as EBackground
 import Element.Border as EBorder
@@ -186,7 +188,7 @@ truncateDescription desc =
 viewProjects model =
     E.column
         [ E.width E.fill
-        , E.paddingXY 0 Palette.spacing4
+        , E.paddingXY 0 Palette.spacing5
         , E.spacing Palette.spacing3
         ]
         [ E.el 
@@ -246,15 +248,15 @@ aboutMeBlock model =
         , E.width E.fill
         ]
         <| E.row
-            [ E.width <| E.maximum 780 E.fill
+            -- [ E.width <| E.maximum 960 E.fill
+            [ E.centerX
             -- , EFont.color <| E.rgb255 255 255 255
             -- , EBackground.color <| E.rgb255 120 12 20
-            , E.centerX
             , E.centerY
-            , E.spacing Palette.spacing2
+            , E.spacing Palette.spacing4
             ]
             [ E.column
-                [ E.width <| E.fillPortion 172
+                [ E.width <| E.maximum 640 E.fill
                 , E.spacing Palette.spacing2
                 ]
                 [ E.el
@@ -280,35 +282,35 @@ aboutMeBlock model =
                 , E.textColumn
                     [ E.spacing Palette.spacing1
                     , EFont.letterSpacing 0.5
-                    , EFont.size Palette.fontSize0
+                    , EFont.size Palette.fontSize1
                     ]
                     [ E.paragraph
                         [
                         ]
-                        [ E.text """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mauris urna, bibendum nec augue vitae, vulputate tempus leo. """
+                        [ E.text """I've been programming for 2 years, and currently my primary interest is to monetize my UI, UX and frontend web development skills."""
                         ]
                     , E.paragraph
                         [
                         ]
-                        [ E.text """Nam venenatis semper lorem. Cras imperdiet erat mauris, vitae fermentum tellus venenatis vel. Fusce semper scelerisque lorem, id tristique dui facilisis in. Sed ultrices viverra egestas. Aliquam rutrum eros et blandit ultrices. """
+                        [ E.text """I love challenges and getting out of my comfort zone. In the future I would like to work more with backend technologies and eventually I would love to work with machine learning, AI, statistical analysis, data visualization or related fields."""
                         ]
                     ]
                 ]
 
             , E.el
                 -- , EBackground.color <| E.rgb255 20 200 12
-                [ E.width <| E.px (60*5) -- doing this because the original file was 60x60px
-                , E.height <| E.px (60*5) -- doing this because the original file was 60x60px
                 -- , EBackground.color  <| E.rgb255 80 80 80
+                [
                 ]
                 <| E.el
                     -- [ E.height <| E.px 200
                     -- , E.width <| E.px 200
-                    [ E.htmlAttribute <| Html.Attributes.style "transform" "scale(5)"
-                    , E.centerX
+                    [ E.centerX
                     , E.centerY
+                    -- , E.width <| E.px  60-- doing this because the original file was 60x60px
+                    -- , E.height <| E.px 60
                     ]
-                    <| E.html (Icons.logo "#000000")
+                    <| E.html (candyBg model)
             ]
 
 contactMeBlock model =
@@ -319,12 +321,11 @@ contactMeBlock model =
         , E.width E.fill
         ]
         <| E.row
-            [ E.width <| E.maximum 780 E.fill
             -- , EFont.color <| E.rgb255 255 255 255
             -- , EBackground.color <| E.rgb255 120 12 20
-            , E.centerX
+            [ E.centerX
             , E.centerY
-            , E.spacing Palette.spacing2
+            , E.spacing Palette.spacing4
             ]
             [ E.el
                 -- , EBackground.color <| E.rgb255 20 200 12
@@ -341,7 +342,7 @@ contactMeBlock model =
                     ]
                     <| E.html (Icons.logo "#000000")
             , E.column
-                [ E.width <| E.fillPortion 172
+                [ E.width <| E.maximum 640 E.fill
                 , E.spacing Palette.spacing2
                 ]
                 [ E.el
@@ -368,21 +369,49 @@ contactMeBlock model =
                         , E.alignRight
                         ]
                         <| E.text "Contact me"
-                , E.textColumn
+                , E.column
                     [ E.spacing Palette.spacing1
                     , EFont.letterSpacing 0.5
-                    , EFont.size Palette.fontSize0
+                    , EFont.size Palette.fontSize1
                     , E.htmlAttribute <| Html.Attributes.style "text-align" "right"
                     ]
-                    [ E.paragraph
-                        [
-                        ]
-                        [ E.text """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mauris urna, bibendum nec augue vitae, vulputate tempus leo. """
-                        ]
+                    [ E.newTabLink 
+                            [ E.alignRight
+                            ]
+                            { url = "mailto:lawsdontapplytopigs@gmail.com"
+                            , label = 
+                                E.row
+                                    [ E.spacing Palette.spacing0
+                                    ]
+                                    [ E.text "my email"
+                                    , E.el
+                                        [ E.height <| E.px 16
+                                        , E.width <| E.px 16
+                                        ]
+                                        <| E.html <| Icons.gmail 
+                                    ]
+                            }
+                    , E.newTabLink 
+                            [ E.alignRight
+                            ]
+                            { url = "https://github.com/lawsdontapplytopigs"
+                            , label = 
+                                E.row
+                                    [ E.spacing Palette.spacing0
+                                    ]
+                                    [ E.text "my github"
+                                    , E.el
+                                        [ E.height <| E.px 16
+                                        , E.width <| E.px 16
+                                        ]
+                                        <| E.html <| Icons.github
+                                    ]
+                            }
                     , E.paragraph
                         [
                         ]
-                        [ E.text """Nam venenatis semper lorem. Cras imperdiet erat mauris, vitae fermentum tellus venenatis vel. Fusce semper scelerisque lorem, id tristique dui facilisis in. Sed ultrices viverra egestas. Aliquam rutrum eros et blandit ultrices. """
+                        [ E.text "You can also find me on other social media "
+                        , E.el [ EFont.italic ] <| E.text "@lawsdontapplytopigs."
                         ]
                     ]
                 ]
@@ -476,12 +505,20 @@ viewPost imgSrc title livePreviewLink githubLink text viewProjectLink =
             }
         ]
 
-candyBg =
+candyBg model =
     let
         numberOfBarPairs = 20
         maxH = 400
         barW = 10
 
+        movement = 
+            Animator.loop 
+                (Animator.millis 1200)
+                (Animator.wrap 0.0 1.0)
+
+        currentVal =
+            Animator.move model.candyBarPercentOffset (\val -> movement)
+                |> (*) (barW * 2)
         drawBarPair ind makeBarPairFunc =
             makeBarPairFunc (ind*barW*2)
         makeBarPair xPos =
@@ -501,7 +538,8 @@ candyBg =
                     , SA.y "0"
                     , SA.width <| String.fromInt barW
                     , SA.height (String.fromInt maxH)
-                    , SA.fill "#ff3168"
+                    -- , SA.fill "#ff314c"
+                    , SA.fill "#000000"
                     ]
                     []
                 ]
@@ -511,36 +549,64 @@ candyBg =
         , SA.width "400"
         , SA.height "400"
         ]
-        [ S.g
-            [ SA.transform "rotate(-25)"
+        [ S.defs
+            [
             ]
-            <| List.indexedMap drawBarPair (List.repeat numberOfBarPairs makeBarPair)
+            [ S.clipPath
+                [ SA.id "rounded-rect"
+                ]
+                [ S.rect
+                    [ SA.x "100"
+                    , SA.y "40"
+                    , SA.width "30"
+                    , SA.height "120"
+                    , SA.rx "15"
+                    ]
+                    [
+                    ]
+                ]
+            ]
+        , S.g
+            [ SA.clipPath "url(#rounded-rect)"
+            ]
+            [ S.g
+                -- , SA.transform "translate(-200px)"
+                [ SA.transform "rotate(-76, 100, 200)"
+                ]
+
+                [ S.g
+                    [ SA.transform <| "translate(" ++ String.fromFloat currentVal ++")"
+                    ]
+
+                    <| List.indexedMap drawBarPair (List.repeat numberOfBarPairs makeBarPair)
+                ]
+            ]
         ]
 
-candyRoundedButton text msg =
-    EInput.button
-        -- , E.htmlAttribute <| Html.Attributes.style "border-radius" "50%"
-        -- , E.width <| E.px 180
-        -- , E.height <| E.px 60
-        [
-        ]
-        { onPress = Just msg
-        , label = 
-            E.el
-                [ E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
-                , E.paddingXY 20 10 
-                , EBorder.rounded 99999999
-                , EBorder.width 3
-                ]
-                <| E.el 
-                    [ E.behindContent
-                        <| E.el
-                            [ E.htmlAttribute <| Html.Attributes.style "transform" "translate(-120px, -80px)"
-                            ]
-                            <| E.html candyBg
-                    ]
-                    <| E.text text
-        }
+-- candyRoundedButton text msg =
+--     EInput.button
+--         -- , E.htmlAttribute <| Html.Attributes.style "border-radius" "50%"
+--         -- , E.width <| E.px 180
+--         -- , E.height <| E.px 60
+--         [
+--         ]
+--         { onPress = Just msg
+--         , label = 
+--             E.el
+--                 [ E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
+--                 , E.paddingXY 20 10 
+--                 , EBorder.rounded 99999999
+--                 , EBorder.width 3
+--                 ]
+--                 <| E.el 
+--                     [ E.behindContent
+--                         <| E.el
+--                             [ E.htmlAttribute <| Html.Attributes.style "transform" "translate(-120px, -80px)"
+--                             ]
+--                             <| E.html candyBg
+--                     ]
+--                     <| E.text text
+--         }
 
 regularRoundedButton text msg =
     EInput.button
@@ -573,6 +639,18 @@ solidRoundedButton text msg =
         }
 
 
+makeIconLink icon_ url_ =
+    E.newTabLink 
+        []
+        { url = url_
+        , label = 
+            E.el
+                [ E.height <| E.px 16
+                , E.width <| E.px 16
+                ]
+                <| E.html <| icon_
+        }
+
 desktopNavbar model =
     let
         makeLink label_ msg_ =
@@ -586,17 +664,6 @@ desktopNavbar model =
                     <| E.text label_
                 }
 
-        makeIconLink icon_ url_ =
-            E.newTabLink 
-                []
-                { url = url_
-                , label = 
-                    E.el
-                        [ E.height <| E.px 16
-                        , E.width <| E.px 16
-                        ]
-                        <| E.html <| icon_
-                }
     in
     E.row
         [ E.width E.fill

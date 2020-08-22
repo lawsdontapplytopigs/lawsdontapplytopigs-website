@@ -8,6 +8,7 @@ import Msg
 import Url
 import Url.Parser
 import View.Home
+import Animator
 
 port windowData : (Json.Decode.Value -> msg) -> Sub msg
 
@@ -23,6 +24,7 @@ main = Browser.application
 type alias Model = 
     { debug : String 
     , viewportGeometry : ViewportGeometry
+    , candyBarPercentOffset : Animator.Timeline Float
     , key : Nav.Key
     , url : Url.Url
     }
@@ -33,6 +35,7 @@ init viewportG url key =
         model_ = 
             { debug = ""
             , viewportGeometry = { height = viewportG.height, width = viewportG.width }
+            , candyBarPercentOffset = Animator.init 0.0
             , url = url
             , key = key
             }
@@ -72,15 +75,29 @@ update msg model =
             let
                 newM = 
                     { model
-                        | debug = Debug.log "" str
+                        | debug = str
                     }
             in
             (newM, Cmd.none)
+        Msg.RuntimeAnimationTick time ->
+            ( Animator.update time animator model, Cmd.none )
+
+
+animator =
+    Animator.watching
+        .candyBarPercentOffset
+        (\newAnimationState model -> 
+            { model
+                | candyBarPercentOffset = newAnimationState
+            }
+        )
+        Animator.animator
 
 subscriptions : Model -> Sub Msg.Msg
 subscriptions model =
     Sub.batch
         [ windowData decodeViewportGeometry
+        , Animator.toSubscription Msg.RuntimeAnimationTick model animator
         ]
 
 type alias ViewportGeometry =
