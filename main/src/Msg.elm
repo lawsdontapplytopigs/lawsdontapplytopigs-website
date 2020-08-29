@@ -10,6 +10,8 @@ type Msg
     | RuntimeAnimationTick Time.Posix
     | GotViewportGeometry { width : Int, height : Int }
     | JsonParseError String
+    | MouseEnteredButton
+    | MouseLeftButton
     | NoOp
 
 type UrlRequest 
