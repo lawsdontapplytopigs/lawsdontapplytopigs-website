@@ -180,14 +180,17 @@ view model =
                         View.Lib.Landscape ->
                             View.Tablet.view "lawsdontapplytopigs" model -- TODO
                 View.Lib.Tablet ->
-
                     case device.orientation of
                         View.Lib.Portrait ->
                             View.Phone.view "lawsdontapplytopigs" model -- TODO
                         View.Lib.Landscape ->
                             View.Tablet.view "lawsdontapplytopigs" model -- TODO
                 View.Lib.Desktop ->
-                    View.Home.view "lawsdontapplytopigs" model
+                    case device.orientation of
+                        View.Lib.Portrait ->
+                            View.Phone.view "lawsdontapplytopigs" model -- TODO
+                        View.Lib.Landscape ->
+                            View.Home.view "lawsdontapplytopigs" model
                 View.Lib.BigDesktop ->
                     View.Home.view "lawsdontapplytopigs" model
         About ->
