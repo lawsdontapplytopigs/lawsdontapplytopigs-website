@@ -1,4 +1,4 @@
-module View.Home exposing (view)
+module View.Tablet exposing (view)
 
 
 import Animator
@@ -26,17 +26,15 @@ view title model =
     let
         body =
             E.layout
-                -- [ E.width E.fill
-                -- [ E.height E.fill
-                -- ]
                 [ E.width E.fill
+                , E.height E.fill
                 ]
                 <| mainCol model
-
     in
         { title = title
         , body = [ body ]
         }
+
 
 mainCol model =
     let
@@ -186,7 +184,9 @@ mainCol model =
                 <| presentationColumn
             ]
         , viewProjects model
+        , cuteSeparator 300
         , aboutMeBlock model
+        , cuteSeparator 300
         , contactMeBlock model
         ]
 
@@ -213,7 +213,8 @@ viewProjects model =
                 -- , EFont.italic
                 , EFont.letterSpacing 1
                 -- , EBackground.color <| E.rgb255 80 80 80
-                -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
+                , E.htmlAttribute <| Html.Attributes.style "text-align" "center"
+                , E.paddingXY 20 0
                 ]
                 [ E.text "My latest work"
                 ]
@@ -222,7 +223,7 @@ viewProjects model =
             , E.centerX
             -- , EBackground.color <| Palette.color1
             ]
-            [ E.wrappedRow
+            [ E.column
                 [ E.width E.fill
                 , E.spacing 40
                 ]
@@ -251,7 +252,7 @@ viewProjects model =
             ]
         ]
 
-aboutMeBlock model = -- TODO: make this center well
+aboutMeBlock model =
     E.el
         -- [ E.height <| E.px 480
         [ E.paddingXY 0 Palette.spacing4
@@ -264,7 +265,7 @@ aboutMeBlock model = -- TODO: make this center well
             -- , EFont.color <| E.rgb255 255 255 255
             -- , EBackground.color <| E.rgb255 120 12 20
             , E.centerY
-            , E.spacing Palette.spacing5
+            , E.spacing Palette.spacing4
             ]
             [ E.column
                 [ E.width <| E.maximum 640 E.fill
@@ -284,16 +285,21 @@ aboutMeBlock model = -- TODO: make this center well
                     -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
                     -- ]
 
-                    [ EFont.size Palette.fontSize2
-                    , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
-                    , EFont.bold
-                    , EFont.letterSpacing 2
+                    [ E.width E.fill
                     ]
-                    <| E.text "About me"
+                    <| E.el 
+                        [ E.centerX
+                        , EFont.letterSpacing 2
+                        , EFont.bold
+                        , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
+                        , EFont.size Palette.fontSize2
+                        ]
+                        <| E.text "About me"
                 , E.textColumn
                     [ E.spacing Palette.spacing1
                     , EFont.letterSpacing 0.5
                     , EFont.size Palette.fontSize1
+                    , E.htmlAttribute <| Html.Attributes.style "text-align" "center"
                     ]
                     [ E.paragraph
                         [
@@ -308,20 +314,30 @@ aboutMeBlock model = -- TODO: make this center well
                     ]
                 ]
 
-            , E.el
-                -- , EBackground.color <| E.rgb255 20 200 12
-                -- , EBackground.color  <| E.rgb255 80 80 80
-                [ E.width <| E.px 100
-                ]
-                <| E.el
-                    -- [ E.height <| E.px 200
-                    -- , E.width <| E.px 200
-                    [ E.centerX
-                    , E.centerY
-                    -- , E.height <| E.px 60
-                    ]
-                    <| E.html (candyBg model) 
+            -- , E.el
+            --     -- , EBackground.color <| E.rgb255 20 200 12
+            --     -- , EBackground.color  <| E.rgb255 80 80 80
+            --     [
+            --     ]
+            --     <| E.el
+            --         -- [ E.height <| E.px 200
+            --         -- , E.width <| E.px 200
+            --         [ E.centerX
+            --         , E.centerY
+            --         -- , E.width <| E.px  60-- doing this because the original file was 60x60px
+            --         -- , E.height <| E.px 60
+            --         ]
+            --         <| E.html (candyBg model)
             ]
+
+cuteSeparator width =
+    E.el
+        [ EBackground.color <| E.rgb255 0 0 0
+        , E.width <| E.px width
+        , E.height <| E.px 1
+        , E.centerX
+        ]
+        <| E.none
 
 contactMeBlock model =
     E.el
@@ -337,21 +353,21 @@ contactMeBlock model =
             , E.centerY
             , E.spacing Palette.spacing4
             ]
-            [ E.el
-                -- , EBackground.color <| E.rgb255 20 200 12
-                [ E.width <| E.px (60*5) -- doing this because the original file was 60x60px
-                , E.height <| E.px (60*5) -- doing this because the original file was 60x60px
-                -- , EBackground.color  <| E.rgb255 80 80 80
-                ]
-                <| E.el
-                    -- [ E.height <| E.px 200
-                    -- , E.width <| E.px 200
-                    [ E.htmlAttribute <| Html.Attributes.style "transform" "scale(5)"
-                    , E.centerX
-                    , E.centerY
-                    ]
-                    <| E.html (Icons.logo "#000000")
-            , E.column
+            -- [ E.el
+            --     -- , EBackground.color <| E.rgb255 20 200 12
+            --     [ E.width <| E.px (60*5) -- doing this because the original file was 60x60px
+            --     , E.height <| E.px (60*5) -- doing this because the original file was 60x60px
+            --     -- , EBackground.color  <| E.rgb255 80 80 80
+            --     ]
+            --     <| E.el
+            --         -- [ E.height <| E.px 200
+            --         -- , E.width <| E.px 200
+            --         [ E.htmlAttribute <| Html.Attributes.style "transform" "scale(5)"
+            --         , E.centerX
+            --         , E.centerY
+            --         ]
+            --         <| E.html (Icons.logo "#000000")
+            [ E.column
                 [ E.width <| E.maximum 640 E.fill
                 , E.spacing Palette.spacing2
                 ]
@@ -372,49 +388,53 @@ contactMeBlock model =
                     -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
                     -- ]
 
-                        [ EFont.size Palette.fontSize2
-                        , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
-                        , EFont.bold
-                        , EFont.letterSpacing 2
-                        , E.alignRight
+                        [ E.width E.fill
                         ]
-                        <| E.text "Contact me"
+                        <| E.el
+                            [ EFont.size Palette.fontSize2
+                            , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
+                            , EFont.bold
+                            , EFont.letterSpacing 2
+                            , E.centerX
+                            ]
+                            <| E.text "Contact me"
                 , E.column
                     [ E.spacing Palette.spacing1
                     , EFont.letterSpacing 0.5
                     , EFont.size Palette.fontSize1
-                    , E.htmlAttribute <| Html.Attributes.style "text-align" "right"
+                    , E.htmlAttribute <| Html.Attributes.style "text-align" "center"
+                    -- , EBackground.color <| E.rgb255 80 80 80
                     ]
-                    [ E.newTabLink
-                            [ E.alignRight
+                    [ E.newTabLink 
+                            [ E.centerX
                             ]
                             { url = "mailto:lawsdontapplytopigs@gmail.com"
                             , label = 
                                 E.row
                                     [ E.spacing Palette.spacing0
                                     ]
-                                    [ E.text "my email"
-                                    , E.el
+                                    [ E.el
                                         [ E.height <| E.px 16
                                         , E.width <| E.px 16
                                         ]
                                         <| E.html <| Icons.gmail 
+                                    , E.text "my email"
                                     ]
                             }
                     , E.newTabLink 
-                            [ E.alignRight
+                            [ E.centerX
                             ]
                             { url = "https://github.com/lawsdontapplytopigs"
                             , label = 
                                 E.row
                                     [ E.spacing Palette.spacing0
                                     ]
-                                    [ E.text "my github"
-                                    , E.el
+                                    [ E.el
                                         [ E.height <| E.px 16
                                         , E.width <| E.px 16
                                         ]
                                         <| E.html <| Icons.github
+                                    , E.text "my github"
                                     ]
                             }
                     , E.paragraph
@@ -429,7 +449,7 @@ contactMeBlock model =
 
 viewPost imgSrc title livePreviewLink githubLink text viewProjectLink =
     E.column
-        [ E.width <| E.maximum 360 E.fill
+        [ E.width <| E.maximum 400 E.fill
         , E.centerX
         , E.spacing Palette.spacing0
         ]
@@ -439,7 +459,7 @@ viewPost imgSrc title livePreviewLink githubLink text viewProjectLink =
             { url = livePreviewLink
             , label =
                 E.image
-                    [ E.width <| E.px 360
+                    [ E.width <| E.px 400
                     ]
                     { src = imgSrc
                     , description = "project preview image"
@@ -731,28 +751,5 @@ desktopNavbar model =
                 ]
                 <| E.html (Icons.logo "#000000")
         ]
-
-
-
-
--- dopeSvgSpinningBall nestedGeometry model =
---     let
---         width = nestedGeometry.width
---         height = nestedGeometry.height
---     in
---     S.svg
---         [ SA.version "1.1"
---         , SA.x "0px"
---         , SA.y "0px"
---         , SA.viewBox <| "0 0 " ++ (String.fromInt width) ++ " " ++ (String.fromInt height)
---         ]
---         [ 
---         ]
-
-
-
-
-
-
 
 

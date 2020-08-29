@@ -1,14 +1,21 @@
 port module Main exposing (..)
 
+import Animator
 import Browser
 import Browser.Navigation as Nav
+-- import Home
 import Json.Decode
 import Json.Encode
 import Msg
 import Url
 import Url.Parser
+
+import View.Lib
 import View.Home
-import Animator
+import View.Tablet
+import View.SmallPhone
+import View.Phone
+
 
 port windowData : (Json.Decode.Value -> msg) -> Sub msg
 
@@ -21,9 +28,11 @@ main = Browser.application
     , onUrlChange = Msg.UrlChanged
     }
 
-type alias Model = 
+type alias Model =
     { debug : String 
     , viewportGeometry : ViewportGeometry
+    -- , homePage : HomeModel
+    , mouseOverContactMe : Animator.Timeline Bool
     , candyBarPercentOffset : Animator.Timeline Float
     , key : Nav.Key
     , url : Url.Url
@@ -32,9 +41,11 @@ type alias Model =
 init : ViewportGeometry -> Url.Url -> Nav.Key -> ( Model, Cmd Msg.Msg )
 init viewportG url key =
     let
-        model_ = 
+        model_ =
             { debug = ""
             , viewportGeometry = { height = viewportG.height, width = viewportG.width }
+            -- , homePage = initHome
+            , mouseOverContactMe = Animator.init False
             , candyBarPercentOffset = Animator.init 0.0
             , url = url
             , key = key
@@ -81,18 +92,43 @@ update msg model =
             (newM, Cmd.none)
         Msg.RuntimeAnimationTick time ->
             ( Animator.update time animator model, Cmd.none )
+        Msg.MouseEnteredButton ->
+            let
+                model_ =
+                    { model
+                        | mouseOverContactMe = Animator.go (Animator.millis 40) True model.mouseOverContactMe
+                    }
+                cmd_ = Cmd.none
+            in
+                ( model_, cmd_ )
+        Msg.MouseLeftButton ->
+            let
+                model_ =
+                    { model
+                        | mouseOverContactMe = Animator.go (Animator.millis 40) False model.mouseOverContactMe
+                    }
+                cmd_ = Cmd.none
+            in
+                ( model_, cmd_ )
 
 
 animator =
-    Animator.watching
-        .candyBarPercentOffset
-        (\newAnimationState model -> 
-            { model
-                | candyBarPercentOffset = newAnimationState
-            }
-        )
-        Animator.animator
-
+    Animator.animator
+        |> Animator.watching
+            getCandyBarPercentOffset
+            (\newAnimationState model -> 
+                { model
+                    | candyBarPercentOffset = newAnimationState
+                }
+            )
+        |> Animator.watching
+            getMouseOverContactMe
+            (\newButtonState model ->
+                { model
+                    | mouseOverContactMe = newButtonState
+                }
+            )
+            
 subscriptions : Model -> Sub Msg.Msg
 subscriptions model =
     Sub.batch
@@ -125,9 +161,35 @@ routeParser =
         ]
 
 view model =
+    let
+        device = View.Lib.classifyDevice model.viewportGeometry
+    in
     case toRoute model.url of
         Home ->
-            View.Home.view "lawsdontapplytopigs" model
+            case device.class of 
+                View.Lib.SmallPhone ->
+                    case device.orientation of
+                        View.Lib.Portrait ->
+                            View.SmallPhone.view "lawsdontapplytopigs" model -- TODO
+                        View.Lib.Landscape ->
+                            View.Tablet.view "lawsdontapplytopigs" model -- TODO
+                View.Lib.Phone ->
+                    case device.orientation of
+                        View.Lib.Portrait ->
+                            View.Phone.view "lawsdontapplytopigs" model -- TODO
+                        View.Lib.Landscape ->
+                            View.Tablet.view "lawsdontapplytopigs" model -- TODO
+                View.Lib.Tablet ->
+
+                    case device.orientation of
+                        View.Lib.Portrait ->
+                            View.Phone.view "lawsdontapplytopigs" model -- TODO
+                        View.Lib.Landscape ->
+                            View.Tablet.view "lawsdontapplytopigs" model -- TODO
+                View.Lib.Desktop ->
+                    View.Home.view "lawsdontapplytopigs" model
+                View.Lib.BigDesktop ->
+                    View.Home.view "lawsdontapplytopigs" model
         About ->
             View.Home.view "lawsdontapplytopigs" model
         Contact ->
@@ -156,3 +218,40 @@ viewportGeometryDecoder =
         (Json.Decode.field "height" Json.Decode.int)
 
 
+
+-- type alias HomeModel =
+--     { candyBarPercentOffset : Animator.Timeline Float
+--     , mouseOverContactMe : Animator.Timeline Bool
+--     }
+
+-- initHome =
+--     { candyBarPercentOffset = Animator.init 0.0
+--     , mouseOverContactMe = Animator.init False
+--     }
+
+
+
+getCandyBarPercentOffset model =
+    model.candyBarPercentOffset
+
+getMouseOverContactMe model =
+    model.mouseOverContactMe
+
+
+
+updateCandyBarPercentOffset val model =
+    let
+        -- current = Animator.current model.candyBarPercentOffset
+        goSlow = Animator.go Animator.slowly True model.mouseOverContactMe
+                -- model_ =
+                --     Animator.go Animator.slowly (updateMouseOverContactMe True model.homePage) model.homePage
+        -- mdl = model.homePage
+    in
+        { model
+            | candyBarPercentOffset = goSlow
+        }
+
+updateMouseOverContactMe value model =
+    { model
+        | mouseOverContactMe = value
+    }
