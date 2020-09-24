@@ -21,6 +21,7 @@ import Palette
 import Svg as S
 import Svg.Attributes as SA
 
+import View.Lib
 
 view title model =
     let
@@ -81,7 +82,8 @@ mainCol model =
                 , E.height E.fill
                 , E.width E.fill
                 , E.paddingEach { top = 0, right = 0, bottom = 0, left = 35 }
-                -- , EBackground.color <| E.rgb255 80 80 80
+                , EBackground.color Palette.color7
+                , EFont.color Palette.color0
                 ]
                 [ E.el
                     [ E.width E.fill
@@ -133,8 +135,8 @@ mainCol model =
                             , EFont.medium
                             , E.spacing Palette.spacing0
                             ]
-                            [ solidRoundedButton "contact me" Msg.NoOp
-                            , regularRoundedButton model.mouseOverContactMe "See my work" Msg.NoOp
+                            [ View.Lib.solidRoundedButton "contact me" Msg.NoOp
+                            , View.Lib.regularRoundedButton model.mouseOverContactMe "See my work" Msg.NoOp
                             ]
                         ]
                 ]
@@ -188,32 +190,28 @@ mainCol model =
         , viewProjects model
         , aboutMeBlock model
         , contactMeBlock model
+        , footer
         ]
-
-truncateDescription desc =
-    if String.length desc > 120 then
-        (String.left 120 desc) ++ "..."
-    else
-        desc
 
 viewProjects model =
     E.column
         [ E.width E.fill
-        , E.paddingXY 0 Palette.spacing5
-        , E.spacing Palette.spacing3
+        -- , E.paddingXY 0 Palette.spacing5
+        , EBackground.color Palette.color0
         ]
         [ E.el 
             [ E.centerX
             -- , EBackground.color <| E.rgb255 80 80 80
             , E.htmlAttribute <| Html.Attributes.id "latest-work-section"
+            , E.paddingEach { top = 60, right = 0, bottom = 0, left = 0 }
             ]
             <| E.paragraph
                 [ EFont.size Palette.fontSize6
                 , EFont.bold
                 -- , EFont.italic
                 , EFont.letterSpacing 1
-                -- , EBackground.color <| E.rgb255 80 80 80
                 -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
+                , EFont.color Palette.color6
                 ]
                 [ E.text "My latest work"
                 ]
@@ -221,73 +219,85 @@ viewProjects model =
             [ E.centerY
             , E.centerX
             -- , EBackground.color <| Palette.color1
+            , E.paddingXY 0 60
             ]
             [ E.wrappedRow
                 [ E.width E.fill
                 , E.spacing 40
                 ]
-                [ E.el [ E.alignTop ] <| viewPost
+                [ viewPost
                     "./0.png"
                     "Sewerslvt website concept"
                     "https://eloquent-turing-60c6e0.netlify.app/"
                     "https://github.com/lawsdontapplytopigs/Sewer"
                     (truncateDescription """In the span of 3 months I challenged my comfort zone and decided to make a windows95 themed website for the electronic music artist Sewerslvt.""")
                     "https://github.com/lawsdontapplytopigs/Sewer"
-                , E.el [ E.alignTop ] <| viewPost
+                    |> wrapColor Palette.color5
+                    |> wrapColor Palette.color2
+                , viewPost
                     "./1.png"
                     "Waneella landing page"
                     "https://musing-williams-2e3d7d.netlify.app/"
                     "https://github.com/lawsdontapplytopigs/waneella_site"
                     (truncateDescription """In 1 week I designed a (yet unfinished) concept landing page for Waneella, a popular pixel artist.""")
                     "https://github.com/lawsdontapplytopigs/waneella_site"
-                , E.el [ E.alignTop ] <| viewPost
+                    |> wrapColor Palette.color5
+                    |> wrapColor Palette.color2
+                , viewPost
                     "./2.png"
                     "AwesomeWM website concept"
                     "https://jovial-lovelace-8eb5a0.netlify.app/"
                     "https://github.com/lawsdontapplytopigs/awesomewm_website"
                     (truncateDescription """In the span of 2 months I took it upon myself to try to solve one of the biggest problems the AwesomeWM project was facing: accurately portraying the graphical capabilities of the window manager.""")
                     "https://github.com/lawsdontapplytopigs/awesomewm_website"
+                    |> wrapColor Palette.color5
+                    |> wrapColor Palette.color2
                 ]
             ]
         ]
 
 aboutMeBlock model = -- TODO: make this center well
+    let
+        pfp =
+            E.el
+                [ E.htmlAttribute <| Html.Attributes.style "border-radius" "50%"
+                , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
+                , E.width <| E.px 180
+                , E.height <| E.px 180
+                , E.inFront
+                    <| E.image
+                        [ E.height <| E.px 180
+                        , E.htmlAttribute <| Html.Attributes.style "right" "80px"
+                        ]
+                        { src = "./pog.jpg"
+                        , description = "my profile image"
+                        }
+                ]
+                <| E.none
+    in
     E.el
         -- [ E.height <| E.px 480
         [ E.paddingXY 0 Palette.spacing4
-        -- , EBackground.color <| E.rgb255 0 0 0
+        , EBackground.color Palette.color7
         , E.width E.fill
         ]
         <| E.row
             -- [ E.width <| E.maximum 960 E.fill
             [ E.centerX
-            -- , EFont.color <| E.rgb255 255 255 255
+            , EFont.color Palette.color0
             -- , EBackground.color <| E.rgb255 120 12 20
             , E.centerY
-            , E.spacing Palette.spacing5
+            , E.spacing Palette.spacing2
             ]
             [ E.column
                 [ E.width <| E.maximum 640 E.fill
                 , E.spacing Palette.spacing2
                 ]
                 [ E.el
-                    -- [ EFont.size Palette.fontSize4
-                    -- , EFont.semiBold
-                    -- ]
-
-                    -- [ EFont.family
-                    --     [ EFont.typeface Palette.font1
-                    --     ]
-                    -- -- , EFont.color Palette.color1
-                    -- , EFont.size 42
-                    -- , EFont.regular
-                    -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
-                    -- ]
-
                     [ EFont.size Palette.fontSize2
-                    , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
+                    -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
                     , EFont.bold
-                    , EFont.letterSpacing 2
+                    , EFont.letterSpacing 1
                     ]
                     <| E.text "About me"
                 , E.textColumn
@@ -295,39 +305,18 @@ aboutMeBlock model = -- TODO: make this center well
                     , EFont.letterSpacing 0.5
                     , EFont.size Palette.fontSize1
                     ]
-                    [ E.paragraph
-                        [
-                        ]
-                        [ E.text """I've been programming for 2 years, and currently my primary interest is to monetize my UI, UX and frontend web development skills."""
-                        ]
-                    , E.paragraph
-                        [
-                        ]
-                        [ E.text """I love challenges and getting out of my comfort zone. In the future I would like to work more with backend technologies and eventually I would love to work with machine learning, AI, statistical analysis, data visualization or related fields."""
-                        ]
-                    ]
+                    View.Lib.aboutMeText
                 ]
 
-            , E.el
-                -- , EBackground.color <| E.rgb255 20 200 12
-                -- , EBackground.color  <| E.rgb255 80 80 80
-                [ E.width <| E.px 100
-                ]
-                <| E.el
-                    -- [ E.height <| E.px 200
-                    -- , E.width <| E.px 200
-                    [ E.centerX
-                    , E.centerY
-                    -- , E.height <| E.px 60
-                    ]
-                    <| E.html (candyBg model) 
+            , pfp
+                |> wrapColorCircle Palette.color1
             ]
 
 contactMeBlock model =
     E.el
         -- [ E.height <| E.px 480
         [ E.paddingXY 0 Palette.spacing4
-        -- , EBackground.color <| E.rgb255 0 0 0
+        , EBackground.color Palette.color7
         , E.width E.fill
         ]
         <| E.row
@@ -339,18 +328,18 @@ contactMeBlock model =
             ]
             [ E.el
                 -- , EBackground.color <| E.rgb255 20 200 12
-                [ E.width <| E.px (60*5) -- doing this because the original file was 60x60px
-                , E.height <| E.px (60*5) -- doing this because the original file was 60x60px
+                [ E.width <| E.px (60*4) -- doing this because the original file was 60x60px
+                , E.height <| E.px (60*4) -- doing this because the original file was 60x60px
                 -- , EBackground.color  <| E.rgb255 80 80 80
                 ]
                 <| E.el
                     -- [ E.height <| E.px 200
                     -- , E.width <| E.px 200
-                    [ E.htmlAttribute <| Html.Attributes.style "transform" "scale(5)"
+                    [ E.htmlAttribute <| Html.Attributes.style "transform" "scale(4)"
                     , E.centerX
                     , E.centerY
                     ]
-                    <| E.html (Icons.logo "#000000")
+                    <| E.html (Icons.logo "#1c1424")
             , E.column
                 [ E.width <| E.maximum 640 E.fill
                 , E.spacing Palette.spacing2
@@ -373,9 +362,9 @@ contactMeBlock model =
                     -- ]
 
                         [ EFont.size Palette.fontSize2
-                        , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
+                        -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
                         , EFont.bold
-                        , EFont.letterSpacing 2
+                        , EFont.letterSpacing 1
                         , E.alignRight
                         ]
                         <| E.text "Contact me"
@@ -427,93 +416,121 @@ contactMeBlock model =
                 ]
             ]
 
-viewPost imgSrc title livePreviewLink githubLink text viewProjectLink =
-    E.column
-        [ E.width <| E.maximum 360 E.fill
-        , E.centerX
-        , E.spacing Palette.spacing0
+wrapColor color content =
+    E.el
+        [ E.padding 5
+        , EBackground.color color
+        , EBorder.rounded 4
         ]
-        [ E.newTabLink
-            [
-            ]
-            { url = livePreviewLink
-            , label =
-                E.image
-                    [ E.width <| E.px 360
-                    ]
-                    { src = imgSrc
-                    , description = "project preview image"
-                    }
-            }
-        , E.paragraph
-            [ EFont.size Palette.fontSize2
-            , EFont.semiBold
-            -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
-            ]
-            [ E.text title
-            ]
-        , E.row
-            [ EFont.size Palette.fontSize0
-            , EFont.medium
+        <| content
+
+wrapColorCircle color content =
+    E.el
+        [ E.padding 5
+        , EBackground.color color
+        , EBorder.rounded 99999
+        ]
+        <| content
+
+viewPost imgSrc title livePreviewLink githubLink text viewProjectLink =
+    let
+        maxImgWidth = 380
+        maxPostHeight = 400
+    in
+    E.el
+        [ E.width <| E.px (maxImgWidth + 20)
+        , E.height <| E.px (maxPostHeight)
+        , EBackground.color Palette.color7
+        , EBorder.rounded 4
+        , EFont.color Palette.color1
+        ]
+        <| E.column
+            [ E.width <| E.maximum maxImgWidth E.fill
+            , E.centerX
             , E.spacing Palette.spacing0
+            , E.paddingEach { top = 10, right = 0, bottom = 0, left = 0 }
             ]
-            [ E.newTabLink 
+            [ E.newTabLink
                 [
                 ]
                 { url = livePreviewLink
-                , label = 
-                    E.row
-                        [ E.spacing (Palette.spacing0 // 2)
+                , label =
+                    E.image
+                        [ E.width <| E.px maxImgWidth
                         ]
-                        [ E.el
-                            [ E.height <| E.px 16
-                            , E.width <| E.px 16
-                            ]
-                            <| E.html <| Icons.live
-                        , E.text "live preview"
-                        ]
+                        { src = imgSrc
+                        , description = "project preview image"
+                        }
                 }
-            , E.newTabLink 
-                [
+            , E.paragraph
+                [ EFont.size Palette.fontSize2
+                , EFont.semiBold
+                -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
                 ]
-                { url = githubLink
-                , label = 
-                    E.row
-                        [ E.spacing (Palette.spacing0 // 2)
-                        ]
-                        [ E.el
-                            [ E.height <| E.px 16
-                            , E.width <| E.px 16
+                [ E.text title
+                ]
+            , E.row
+                [ EFont.size Palette.fontSize0
+                , EFont.medium
+                , E.spacing Palette.spacing0
+                ]
+                [ E.newTabLink 
+                    [
+                    ]
+                    { url = livePreviewLink
+                    , label = 
+                        E.row
+                            [ E.spacing (Palette.spacing0 // 2)
                             ]
-                            <| E.html <| Icons.github
-                        , E.text "code"
+                            [ E.el
+                                [ E.height <| E.px 16
+                                , E.width <| E.px 16
+                                ]
+                                <| E.html <| Icons.live
+                            , E.text "live preview"
+                            ]
+                    }
+                , E.newTabLink 
+                    [
+                    ]
+                    { url = githubLink
+                    , label = 
+                        E.row
+                            [ E.spacing (Palette.spacing0 // 2)
+                            ]
+                            [ E.el
+                                [ E.height <| E.px 16
+                                , E.width <| E.px 16
+                                ]
+                                <| E.html <| Icons.github
+                            , E.text "code"
+                            ]
+                    }
+                ]
+            , E.paragraph
+                [ E.width E.fill
+                , EFont.size Palette.fontSize0
+                ]
+                [ E.text text
+                ]
+            , E.newTabLink
+                [ EFont.size Palette.fontSize0
+                , EFont.semiBold
+                , E.paddingEach {top = 5, right = 0, bottom = 0, left = 0}
+                ]
+                { url = viewProjectLink
+                , label = 
+                    E.el 
+                        [ E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"  
+                        -- , EFont.color <| E.rgb255 85 35 72
+                -- , EBackground.color <| E.rgb255 255 225 246
+
+                -- , EBackground.color <| E.rgb255 255 220 234
+                -- , EBackground.color <| E.rgb255 255 135 172
                         ]
+                        <| E.text "view project"
                 }
             ]
-        , E.paragraph
-            [ E.width E.fill
-            , EFont.size Palette.fontSize0
-            ]
-            [ E.text text
-            ]
-        , E.newTabLink
-            [ EFont.size Palette.fontSize0
-            , EFont.semiBold
-            , E.paddingEach {top = 5, right = 0, bottom = 0, left = 0}
-            ]
-            { url = viewProjectLink
-            , label = 
-                E.el 
-                    [ E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"  
-                    -- , EFont.color <| E.rgb255 85 35 72
-            -- , EBackground.color <| E.rgb255 255 225 246
-
-            -- , EBackground.color <| E.rgb255 255 220 234
-            -- , EBackground.color <| E.rgb255 255 135 172
-                    ]
-                    <| E.text "view project"
-            }
-        ]
 
 candyBg model =
     let
@@ -618,57 +635,6 @@ candyBg model =
 --                     <| E.text text
 --         }
 
-regularRoundedButton mouseOverContactMe text msg =
-    EInput.button
-        [ EBorder.width 3
-        -- , E.htmlAttribute <| Html.Attributes.style "border-radius" "50%"
-        , EBorder.rounded 99999999
-        , EBorder.color <| E.rgb255 0 0 0
-        , EBackground.color 
-            <| E.fromRgb <| Color.toRgba
-                <| Animator.color mouseOverContactMe <| 
-                    \btn ->
-                        case btn of
-                            False ->
-                                Color.rgb255 255 255 255
-                            True ->
-                                Color.rgb255 0 0 0
-                    
-        , EFont.color
-            <| E.fromRgb <| Color.toRgba
-                <| Animator.color mouseOverContactMe <| 
-                    \btn ->
-                        case btn of
-                            False ->
-                                Color.rgb255 0 0 0
-                            True ->
-                                Color.rgb255 255 255 255
-        , EEvents.onMouseEnter <| Msg.MouseEnteredButton
-        , EEvents.onMouseLeave <| Msg.MouseLeftButton
-        ]
-        { onPress = Just msg
-        , label = E.el 
-            [ E.paddingXY 20 10 
-            ] <| E.text text
-        }
-
-
-solidRoundedButton text msg =
-    EInput.button
-        [ EBorder.width 0
-        -- , E.htmlAttribute <| Html.Attributes.style "border-radius" "50%"
-        , EBorder.rounded 99999999
-        -- , EBackground.color Palette.color1
-        , EBackground.color Palette.black
-        ]
-        { onPress = Just msg
-        , label = E.el 
-            [ E.paddingXY 23 13
-            , EFont.color Palette.white
-            ]
-            <| E.text text
-        }
-
 
 makeIconLink icon_ url_ =
     E.newTabLink 
@@ -729,11 +695,49 @@ desktopNavbar model =
                 [ E.width <| E.px 48
                 , E.height <| E.px 48
                 ]
-                <| E.html (Icons.logo "#000000")
+                <| E.html (Icons.logo "#1c1424")
         ]
 
 
+truncateDescription desc =
+    if String.length desc > 120 then
+        (String.left 120 desc) ++ "..."
+    else
+        desc
 
+
+footer =
+    E.el
+        [ E.width E.fill
+        , E.height <| E.px 90
+        , EBackground.color Palette.color0
+        ]
+        <| E.el
+            -- [ EBackground.color Palette.color2
+            -- [ EBorder.rounded 999999
+            [ E.centerX
+            , E.centerY
+            ]
+            <| E.paragraph 
+                [ E.padding 16 
+                , EFont.color Palette.color6
+                , EFont.size Palette.fontSize1
+                ]
+                [ E.text "Made with "
+                , E.newTabLink 
+                    [ EFont.medium
+                    ]
+                    { url = "elm-lang.org"
+                    , label = E.text "elm"
+                    }
+                , E.text " and "
+                , E.newTabLink
+                    [ EFont.medium
+                    ]
+                    { url = "github.com/mdgriffith/elm-ui"
+                    , label = E.text "elm-ui"
+                    }
+                ]
 
 -- dopeSvgSpinningBall nestedGeometry model =
 --     let

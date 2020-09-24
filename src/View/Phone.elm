@@ -20,6 +20,7 @@ import Palette
 
 import Svg as S
 import Svg.Attributes as SA
+import View.Lib
 
 
 view title model =
@@ -43,12 +44,6 @@ mainCol model =
                 model.viewportGeometry.height
             else
                 680
-        imageSizeRatioBreakpoint = 1.574
-        widthOrHeight = 
-            if (((toFloat model.viewportGeometry.width) / 2 ) / (toFloat imgSize)) < imageSizeRatioBreakpoint then
-                E.height <| E.px imgSize
-            else
-                E.width <| E.px (round ((toFloat model.viewportGeometry.width) / 2))
     in
     E.column
         [ E.width E.fill
@@ -61,52 +56,9 @@ mainCol model =
             [ E.width E.fill
             , E.spacing Palette.spacing2
             , E.height <| E.px imgSize
-
-            --     [ E.inFront
-            --         <| E.image
-            --             -- [ E.height <| E.px imgSize
-            --             [ widthOrHeight
-            --             , E.centerX
-            --             , E.htmlAttribute <| Html.Attributes.style "right" "100px"
-            --             , E.alignTop
-            --             ]
-            --             { src = "./pog.jpg"
-            --             , description = "fat pog"
-            --             }
-            --     , E.width E.fill
-            --     , E.height <| E.px imgSize
-            --     -- , E.centerY
-            --     -- , E.centerX
-            --     , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
-            --     , E.alignLeft
-            --     , E.alignTop
-            --     -- , EBackground.color <| E.rgb255 80 80 80
-            --     ]
-            -- , EBackground.color <| E.rgb255 80 80 80
             , E.paddingXY 20 0
+            , EBackground.color Palette.color7
             ]
-            -- [ E.el
-            --     [ E.inFront
-            --         <| E.image
-            --             -- [ E.height <| E.px imgSize
-            --             [ widthOrHeight
-            --             , E.centerX
-            --             , E.htmlAttribute <| Html.Attributes.style "right" "100px"
-            --             , E.alignTop
-            --             ]
-            --             { src = "./pog.jpg"
-            --             , description = "fat pog"
-            --             }
-            --     , E.width E.fill
-            --     , E.height <| E.px imgSize
-            --     -- , E.centerY
-            --     -- , E.centerX
-            --     , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
-            --     , E.alignLeft
-            --     , E.alignTop
-            --     -- , EBackground.color <| E.rgb255 80 80 80
-            --     ]
-            --     <| E.none
             <| E.el
                 [ E.width E.fill
                 , E.height E.fill
@@ -116,6 +68,7 @@ mainCol model =
                         , E.width E.fill
                         ]
                         <| phoneNavbar model
+                , EFont.color <| Palette.color0
                 ]
                 <| E.column
                     [ EFont.size Palette.fontSize4
@@ -173,16 +126,15 @@ mainCol model =
                                 , EFont.medium
                                 , E.spacing Palette.spacing0
                                 ]
-                                [ solidRoundedButton "contact me" Msg.NoOp
-                                , regularRoundedButton model.mouseOverContactMe "See my work" Msg.NoOp
+                                [ View.Lib.solidRoundedButton "contact me" Msg.NoOp
+                                , View.Lib.regularRoundedButton model.mouseOverContactMe "See my work" Msg.NoOp
                                 ]
                             ]
                     ]
         , viewProjects model
-        , cuteSeparator 300
         , aboutMeBlock model
-        , cuteSeparator 300
         , contactMeBlock model
+        , View.Lib.footer
         ]
 
 truncateDescription desc =
@@ -194,17 +146,18 @@ truncateDescription desc =
 viewProjects model =
     E.column
         [ E.width E.fill
-        , E.paddingXY 0 Palette.spacing5
-        , E.spacing Palette.spacing3
+        , EBackground.color Palette.color7
         ]
         [ E.el 
             [ E.centerX
             -- , EBackground.color <| E.rgb255 80 80 80
             , E.htmlAttribute <| Html.Attributes.id "latest-work-section"
+            , E.paddingEach { top = 60, right = 0, bottom = 0, left = 0 }
             ]
             <| E.paragraph
                 [ EFont.size Palette.fontSize5
                 , EFont.bold
+                , EFont.color Palette.color0
                 -- , EFont.italic
                 , EFont.letterSpacing 2
                 -- , EBackground.color <| E.rgb255 80 80 80
@@ -217,26 +170,28 @@ viewProjects model =
             [ E.centerY
             , E.centerX
             -- , EBackground.color <| Palette.color1
+            , E.paddingXY 0 60
+            , EFont.color Palette.color0
             ]
             [ E.column
                 [ E.width E.fill
                 , E.spacing 40
                 ]
-                [ E.el [ E.alignTop ] <| viewPost
+                [ viewPost
                     "./0.png"
                     "Sewerslvt website concept"
                     "https://eloquent-turing-60c6e0.netlify.app/"
                     "https://github.com/lawsdontapplytopigs/Sewer"
                     (truncateDescription """In the span of 3 months I challenged my comfort zone and decided to make a windows95 themed website for the electronic music artist Sewerslvt.""")
                     "https://github.com/lawsdontapplytopigs/Sewer"
-                , E.el [ E.alignTop ] <| viewPost
+                , viewPost
                     "./1.png"
                     "Waneella landing page"
                     "https://musing-williams-2e3d7d.netlify.app/"
                     "https://github.com/lawsdontapplytopigs/waneella_site"
                     (truncateDescription """In 1 week I designed a (yet unfinished) concept landing page for Waneella, a popular pixel artist.""")
                     "https://github.com/lawsdontapplytopigs/waneella_site"
-                , E.el [ E.alignTop ] <| viewPost
+                , viewPost
                     "./2.png"
                     "AwesomeWM website concept"
                     "https://jovial-lovelace-8eb5a0.netlify.app/"
@@ -248,21 +203,46 @@ viewProjects model =
         ]
 
 aboutMeBlock model =
+    let
+        pfp =
+            E.el
+                -- [ E.width <| E.px 180
+                -- [ E.width <| E.px 180
+                [ E.htmlAttribute <| Html.Attributes.style "border-radius" "50%"
+                , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
+                , E.width <| E.px 180
+                , E.height <| E.px 180
+                , E.inFront
+                    <| E.image
+                        [ E.height <| E.px 180
+                        , E.htmlAttribute <| Html.Attributes.style "right" "80px"
+                        ]
+                        { src = "./pog.jpg"
+                        , description = "my profile image"
+                        }
+                ]
+                <| E.none
+    in
     E.el
         -- [ E.height <| E.px 480
-        [ E.paddingXY 20 Palette.spacing4
-        -- , EBackground.color <| E.rgb255 0 0 0
+        [ E.paddingXY 0 Palette.spacing4
+        , EBackground.color Palette.color7
         , E.width E.fill
         ]
-        <| E.el
+        <| E.column
             -- [ E.width <| E.maximum 960 E.fill
             [ E.centerX
-            -- , EFont.color <| E.rgb255 255 255 255
+            , EFont.color Palette.color0
             -- , EBackground.color <| E.rgb255 120 12 20
             , E.centerY
-            , E.spacing Palette.spacing4
+            , E.spacing Palette.spacing2
             ]
-            <| E.column
+            [ pfp
+                -- |> wrapColorCircle Palette.color5
+                |> View.Lib.wrapColorCircle Palette.color1
+                |> E.el [ E.centerX ]
+                    
+            , E.column
                 [ E.width <| E.maximum 640 E.fill
                 , E.spacing Palette.spacing2
                 ]
@@ -284,115 +264,65 @@ aboutMeBlock model =
                     ]
                     <| E.el 
                         [ E.centerX
-                        , EFont.letterSpacing 2
+                        , EFont.letterSpacing 1
                         , EFont.bold
-                        , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
+                        -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
                         , EFont.size Palette.fontSize2
                         ]
                         <| E.text "About me"
+
                 , E.textColumn
                     [ E.spacing Palette.spacing1
                     , EFont.letterSpacing 0.5
                     , EFont.size Palette.fontSize1
-                    , E.htmlAttribute <| Html.Attributes.style "text-align" "center"
                     , E.width E.shrink
-                    -- , EFont.family 
-                    --     [ EFont.typeface "Lato"
-                    --     ]
+                    , E.htmlAttribute <| Html.Attributes.style "text-align" "center"
+                    , E.paddingXY 20 0
                     ]
-                    [ E.paragraph
-                        [
-                        ]
-                        [ E.text """I've been programming for 2 years, and currently my primary interest is to monetize my UI, UX and frontend web development skills."""
-                        ]
-                    , E.paragraph
-                        [
-                        ]
-                        [ E.text """I love challenges and getting out of my comfort zone. In the future I would like to work more with backend technologies and eventually I would love to work with machine learning, AI, statistical analysis, data visualization or related fields."""
-                        ]
-                    ]
+                    View.Lib.aboutMeText
                 ]
+            ]
 
-            -- , E.el
-            --     -- , EBackground.color <| E.rgb255 20 200 12
-            --     -- , EBackground.color  <| E.rgb255 80 80 80
-            --     [
-            --     ]
-            --     <| E.el
-            --         -- [ E.height <| E.px 200
-            --         -- , E.width <| E.px 200
-            --         [ E.centerX
-            --         , E.centerY
-            --         -- , E.width <| E.px  60-- doing this because the original file was 60x60px
-            --         -- , E.height <| E.px 60
-            --         ]
-            --         <| E.html (candyBg model)
-
-cuteSeparator width =
-    E.el
-        [ EBackground.color <| E.rgb255 80 80 80
-        , E.width <| E.px width
-        , E.height <| E.px 1
-        , E.centerX
-        ]
-        <| E.none
 
 contactMeBlock model =
     E.el
         -- [ E.height <| E.px 480
-        [ E.paddingXY 20 Palette.spacing4
-        -- , EBackground.color <| E.rgb255 0 0 0
+        [ E.paddingXY 0 Palette.spacing4
+        , EBackground.color Palette.color7
         , E.width E.fill
         ]
         <| E.row
             -- , EFont.color <| E.rgb255 255 255 255
-            -- , EBackground.color <| E.rgb255 120 12 20
             [ E.centerX
             , E.centerY
             , E.spacing Palette.spacing4
+            -- , EBackground.color <| E.rgb255 120 12 20
             ]
-            -- [ E.el
-            --     -- , EBackground.color <| E.rgb255 20 200 12
-            --     [ E.width <| E.px (60*5) -- doing this because the original file was 60x60px
-            --     , E.height <| E.px (60*5) -- doing this because the original file was 60x60px
-            --     -- , EBackground.color  <| E.rgb255 80 80 80
-            --     ]
-            --     <| E.el
-            --         -- [ E.height <| E.px 200
-            --         -- , E.width <| E.px 200
-            --         [ E.htmlAttribute <| Html.Attributes.style "transform" "scale(5)"
-            --         , E.centerX
-            --         , E.centerY
-            --         ]
-            --         <| E.html (Icons.logo "#000000")
             [ E.column
                 [ E.width <| E.maximum 640 E.fill
                 , E.spacing Palette.spacing2
                 ]
                 [ E.el
+                    [ E.width <| E.px (60*3) -- doing this because the original file was 60x60px
+                    , E.height <| E.px (60*3) -- doing this because the original file was 60x60px
+                    , E.centerX
+                    ]
+                    <| E.el
+                        [ E.htmlAttribute <| Html.Attributes.style "transform" "scale(3)"
+                        , E.centerX
+                        , E.centerY
+                        ]
+                        <| E.html (Icons.logo "#1c1424")
+                , E.el
                     [ E.width E.fill
                     ]
                     <| E.el
-                    -- [ EFont.size Palette.fontSize4
-                    -- , EFont.semiBold
-                    -- ]
-
-                    -- [ EFont.family
-                    --     [ EFont.typeface Palette.font1
-                    --     ]
-                    -- -- , EFont.color Palette.color1
-                    -- , EFont.size 42
-                    -- , EFont.regular
-                    -- , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
-                    -- ]
-
                         [ E.width E.fill
                         ]
                         <| E.el
                             [ EFont.size Palette.fontSize2
-                            , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
                             , EFont.bold
-                            , EFont.letterSpacing 2
+                            , EFont.letterSpacing 1
                             , E.centerX
                             ]
                             <| E.text "Contact me"
@@ -401,8 +331,6 @@ contactMeBlock model =
                     , EFont.letterSpacing 0.5
                     , EFont.size Palette.fontSize1
                     , E.htmlAttribute <| Html.Attributes.style "text-align" "center"
-                    , E.width E.shrink
-                    -- , EBackground.color <| E.rgb255 80 80 80
                     ]
                     [ E.newTabLink 
                             [ E.centerX
@@ -528,11 +456,6 @@ viewPost imgSrc title livePreviewLink githubLink text viewProjectLink =
                 , label = 
                     E.el 
                         [ E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"  
-                        -- , EFont.color <| E.rgb255 85 35 72
-                -- , EBackground.color <| E.rgb255 255 225 246
-
-                -- , EBackground.color <| E.rgb255 255 220 234
-                -- , EBackground.color <| E.rgb255 255 135 172
                         ]
                         <| E.text "view project"
                 }
@@ -617,82 +540,6 @@ candyBg model =
             ]
         ]
 
--- candyRoundedButton text msg =
---     EInput.button
---         -- , E.htmlAttribute <| Html.Attributes.style "border-radius" "50%"
---         -- , E.width <| E.px 180
---         -- , E.height <| E.px 60
---         [
---         ]
---         { onPress = Just msg
---         , label = 
---             E.el
---                 [ E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
---                 , E.paddingXY 20 10 
---                 , EBorder.rounded 99999999
---                 , EBorder.width 3
---                 ]
---                 <| E.el 
---                     [ E.behindContent
---                         <| E.el
---                             [ E.htmlAttribute <| Html.Attributes.style "transform" "translate(-120px, -80px)"
---                             ]
---                             <| E.html candyBg
---                     ]
---                     <| E.text text
---         }
-
-regularRoundedButton mouseOverContactMe text msg =
-    EInput.button
-        [ EBorder.width 3
-        -- , E.htmlAttribute <| Html.Attributes.style "border-radius" "50%"
-        , EBorder.rounded 99999999
-        , EBorder.color <| E.rgb255 0 0 0
-        , EBackground.color 
-            <| E.fromRgb <| Color.toRgba
-                <| Animator.color mouseOverContactMe <| 
-                    \btn ->
-                        case btn of
-                            False ->
-                                Color.rgb255 255 255 255
-                            True ->
-                                Color.rgb255 0 0 0
-                    
-        , EFont.color
-            <| E.fromRgb <| Color.toRgba
-                <| Animator.color mouseOverContactMe <| 
-                    \btn ->
-                        case btn of
-                            False ->
-                                Color.rgb255 0 0 0
-                            True ->
-                                Color.rgb255 255 255 255
-        , EEvents.onMouseEnter <| Msg.MouseEnteredButton
-        , EEvents.onMouseLeave <| Msg.MouseLeftButton
-        ]
-        { onPress = Just msg
-        , label = E.el 
-            [ E.paddingXY 20 10 
-            ] <| E.text text
-        }
-
-
-solidRoundedButton text msg =
-    EInput.button
-        [ EBorder.width 0
-        -- , E.htmlAttribute <| Html.Attributes.style "border-radius" "50%"
-        , EBorder.rounded 99999999
-        -- , EBackground.color Palette.color1
-        , EBackground.color Palette.black
-        ]
-        { onPress = Just msg
-        , label = E.el 
-            [ E.paddingXY 23 13
-            , EFont.color Palette.white
-            ]
-            <| E.text text
-        }
-
 
 makeIconLink icon_ url_ =
     E.newTabLink 
@@ -724,6 +571,7 @@ phoneNavbar model =
         [ E.width E.fill
         , E.height <| E.px 70
         -- , EBackground.color Palette.color1
+        , EFont.color Palette.color0
         ]
         [ E.row
             [ E.spacing 15
@@ -735,7 +583,7 @@ phoneNavbar model =
                     [ E.width <| E.px 48
                     , E.height <| E.px 48
                     ]
-                    <| E.html (Icons.logo "#000000")
+                    <| E.html (Icons.logo "#1c1424")
             , vSeparator 20
             , E.row
                 -- [ EBackground.color Palette.color1
