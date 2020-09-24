@@ -1,5 +1,18 @@
+# Distribution
+build/
 
-main/built/
-main/elm-stuff/
-main/ideas.md
-main/art/
+# elm-package generated files
+elm-stuff
+
+# elm-repl generated files
+repl-temp-*
+
+# Dependency directories
+node_modules
+
+# Desktop Services Store on macOS
+.DS_Store
+
+_make.sh
+art/
+ideas.md

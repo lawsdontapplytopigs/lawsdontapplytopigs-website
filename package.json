@@ -1,0 +1,16 @@
+{
+  "name": "lawsdontapplytopigs",
+  "version": "1.0.0",
+  "description": "my website",
+  "main": "index.js",
+  "repository": "github.com/lawsdontapplytopigs/lawsdontapplytopigs-website",
+  "author": "Adrian Gabriel <lawsdontapplytopigs@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "create-elm-app": "^4.2.27"
+  },
+  "scripts": {
+    "start": "elm-app start",
+    "build": "elm-app build"
+  }
+}
