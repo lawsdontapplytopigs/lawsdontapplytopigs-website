@@ -190,7 +190,7 @@ mainCol model =
         , viewProjects model
         , aboutMeBlock model
         , contactMeBlock model
-        , footer
+        , View.Lib.footer
         ]
 
 viewProjects model =
@@ -704,59 +704,5 @@ truncateDescription desc =
         (String.left 120 desc) ++ "..."
     else
         desc
-
-
-footer =
-    E.el
-        [ E.width E.fill
-        , E.height <| E.px 90
-        , EBackground.color Palette.color0
-        ]
-        <| E.el
-            -- [ EBackground.color Palette.color2
-            -- [ EBorder.rounded 999999
-            [ E.centerX
-            , E.centerY
-            ]
-            <| E.paragraph 
-                [ E.padding 16 
-                , EFont.color Palette.color6
-                , EFont.size Palette.fontSize1
-                ]
-                [ E.text "Made with "
-                , E.newTabLink 
-                    [ EFont.medium
-                    ]
-                    { url = "elm-lang.org"
-                    , label = E.text "elm"
-                    }
-                , E.text " and "
-                , E.newTabLink
-                    [ EFont.medium
-                    ]
-                    { url = "github.com/mdgriffith/elm-ui"
-                    , label = E.text "elm-ui"
-                    }
-                ]
-
--- dopeSvgSpinningBall nestedGeometry model =
---     let
---         width = nestedGeometry.width
---         height = nestedGeometry.height
---     in
---     S.svg
---         [ SA.version "1.1"
---         , SA.x "0px"
---         , SA.y "0px"
---         , SA.viewBox <| "0 0 " ++ (String.fromInt width) ++ " " ++ (String.fromInt height)
---         ]
---         [ 
---         ]
-
-
-
-
-
-
 
 

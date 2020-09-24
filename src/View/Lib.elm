@@ -145,18 +145,18 @@ footer =
                 , E.newTabLink 
                     [ EFont.medium
                     ]
-                    { url = "elm-lang.org"
+                    { url = "https://elm-lang.org"
                     , label = E.text "elm"
                     }
                 , E.text " and "
+
                 , E.newTabLink
                     [ EFont.medium
                     ]
-                    { url = "github.com/mdgriffith/elm-ui"
+                    { url = "https://github.com/mdgriffith/elm-ui"
                     , label = E.text "elm-ui"
                     }
                 ]
-
 
 wrapColor color content =
     E.el
@@ -186,10 +186,6 @@ aboutMeText =
         [ E.text """I love challenges and getting out of my comfort zone. In the future I would like to work more with backend technologies and eventually I would love to work with machine learning, AI, statistical analysis, data visualization or related fields."""
         ]
     ]
-
-
-
-
 
 
 

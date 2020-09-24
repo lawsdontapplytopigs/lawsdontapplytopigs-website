@@ -190,7 +190,7 @@ mainCol model =
         , viewProjects model
         , aboutMeBlock model
         , contactMeBlock model
-        , footer
+        , View.Lib.footer
         ]
 
 truncateDescription desc =
@@ -688,53 +688,4 @@ desktopNavbar model =
         ]
 
 
-footer =
-    E.el
-        [ E.width E.fill
-        , E.height <| E.px 90
-        , EBackground.color Palette.color0
-        ]
-        <| E.el
-            -- [ EBackground.color Palette.color2
-            -- [ EBorder.rounded 999999
-            [ E.centerX
-            , E.centerY
-            ]
-            <| E.paragraph 
-                [ E.padding 16 
-                , EFont.color Palette.color6
-                , EFont.size Palette.fontSize1
-                ]
-                [ E.text "Made with "
-                , E.newTabLink 
-                    [ EFont.medium
-                    ]
-                    { url = "elm-lang.org"
-                    , label = E.text "elm"
-                    }
-                , E.text " and "
-                , E.newTabLink
-                    [ EFont.medium
-                    ]
-                    { url = "github.com/mdgriffith/elm-ui"
-                    , label = E.text "elm-ui"
-                    }
-                ]
-
-
-wrapColor color content =
-    E.el
-        [ E.padding 5
-        , EBackground.color color
-        , EBorder.rounded 4
-        ]
-        <| content
-
-wrapColorCircle color content =
-    E.el
-        [ E.padding 5
-        , EBackground.color color
-        , EBorder.rounded 99999
-        ]
-        <| content
 
