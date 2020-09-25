@@ -5,14 +5,15 @@ import Url
 import Time
 
 type Msg 
-    = UrlChanged Url.Url
+    = NoOp
+    | UrlChanged Url.Url
     | LinkClicked Browser.UrlRequest
     | RuntimeAnimationTick Time.Posix
     | GotViewportGeometry { width : Int, height : Int }
     | JsonParseError String
     | MouseEnteredButton
     | MouseLeftButton
-    | NoOp
+    | SmoothScroll String
 
 type UrlRequest 
     = Internal Url.Url

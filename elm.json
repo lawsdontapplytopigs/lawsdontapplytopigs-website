@@ -14,6 +14,8 @@
             "elm/svg": "1.0.1",
             "elm/time": "1.0.0",
             "elm/url": "1.0.0",
+            "elm-community/easing-functions": "2.0.0",
+            "linuss/smooth-scroll": "1.1.0",
             "mdgriffith/elm-animator": "1.0.1",
             "mdgriffith/elm-ui": "1.1.8"
         },

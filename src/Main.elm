@@ -3,10 +3,12 @@ port module Main exposing (..)
 import Animator
 import Browser
 import Browser.Navigation as Nav
+import Ease
 -- import Home
 import Json.Decode
 import Json.Encode
 import Msg
+import SmoothScroll
 import Url
 import Url.Parser
 
@@ -15,6 +17,7 @@ import View.Home
 import View.Tablet
 import View.SmallPhone
 import View.Phone
+import Task
 
 
 port windowData : (Json.Decode.Value -> msg) -> Sub msg
@@ -108,6 +111,19 @@ update msg model =
                         | mouseOverContactMe = Animator.go (Animator.millis 40) False model.mouseOverContactMe
                     }
                 cmd_ = Cmd.none
+            in
+                ( model_, cmd_ )
+        Msg.SmoothScroll id ->
+            let
+                scrollConfig =
+                    { offset = 12
+                    , speed = 65
+                    , easing = Ease.inOutCubic
+                    }
+                model_ = model
+                cmd_ = Task.attempt 
+                    (always Msg.NoOp) 
+                    (SmoothScroll.scrollToWithOptions scrollConfig id)
             in
                 ( model_, cmd_ )
 

@@ -135,8 +135,8 @@ mainCol model =
                             , EFont.medium
                             , E.spacing Palette.spacing0
                             ]
-                            [ View.Lib.solidRoundedButton "contact me" Msg.NoOp
-                            , View.Lib.regularRoundedButton model.mouseOverContactMe "See my work" Msg.NoOp
+                            [ View.Lib.solidRoundedButton "contact me" (Msg.SmoothScroll View.Lib.contactMeSectionId)
+                            , View.Lib.regularRoundedButton model.mouseOverContactMe "See my work" (Msg.SmoothScroll View.Lib.latestWorkSectionId)
                             ]
                         ]
                 ]
@@ -187,7 +187,7 @@ mainCol model =
                 ]
                 <| presentationColumn
             ]
-        , viewProjects model
+        , latestWork model
         , aboutMeBlock model
         , contactMeBlock model
         , View.Lib.footer
@@ -200,7 +200,7 @@ truncateDescription desc =
         desc
 
 
-viewProjects model =
+latestWork model =
     E.column
         [ E.width E.fill
         -- , E.paddingXY 0 Palette.spacing5
@@ -209,7 +209,7 @@ viewProjects model =
         [ E.el 
             [ E.centerX
             -- , EBackground.color <| E.rgb255 80 80 80
-            , E.htmlAttribute <| Html.Attributes.id "latest-work-section"
+            , E.htmlAttribute <| Html.Attributes.id View.Lib.latestWorkSectionId
             , E.paddingEach { top = 60, right = 0, bottom = 0, left = 0 }
             ]
             <| E.paragraph
@@ -289,6 +289,7 @@ aboutMeBlock model =
         [ E.paddingXY 0 Palette.spacing4
         , EBackground.color Palette.color7
         , E.width E.fill
+        , E.htmlAttribute <| Html.Attributes.id View.Lib.aboutMeSectionId
         ]
         <| E.column
             -- [ E.width <| E.maximum 960 E.fill
@@ -335,6 +336,7 @@ contactMeBlock model =
         [ E.paddingXY 0 Palette.spacing4
         , EBackground.color Palette.color7
         , E.width E.fill
+        , E.htmlAttribute <| Html.Attributes.id View.Lib.contactMeSectionId
         ]
         <| E.row
             -- , EFont.color <| E.rgb255 255 255 255
@@ -638,19 +640,6 @@ makeIconLink icon_ url_ =
         }
 
 desktopNavbar model =
-    let
-        makeLink label_ msg_ =
-            EInput.button
-                [ EFont.color Palette.color0
-                ]
-                { onPress = Just msg_
-                , label = E.el 
-                    [
-                    ]
-                    <| E.text label_
-                }
-
-    in
     E.row
         [ E.width E.fill
         , E.height <| E.px 70
@@ -672,9 +661,9 @@ desktopNavbar model =
             , E.spacing 30
             , E.alignRight
             ]
-            [ makeLink "Work" Msg.NoOp
-            , makeLink "About" Msg.NoOp
-            , makeLink "Contact" Msg.NoOp
+            [ View.Lib.makeNavbarLink "Work" (Msg.SmoothScroll View.Lib.latestWorkSectionId)
+            , View.Lib.makeNavbarLink "About" (Msg.SmoothScroll View.Lib.aboutMeSectionId)
+            , View.Lib.makeNavbarLink "Contact" (Msg.SmoothScroll View.Lib.contactMeSectionId)
             ]
         , E.el
             [ E.paddingEach { top = 0, right = 30, bottom = 0, left = 30 }

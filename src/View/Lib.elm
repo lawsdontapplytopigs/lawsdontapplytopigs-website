@@ -8,9 +8,11 @@ import Element.Border as EBorder
 import Element.Events as EEvents
 import Element.Font as EFont
 import Element.Input as EInput
+
+import Html.Attributes
+import Msg
 import Palette
 
-import Msg
 
 {-| -}
 type alias Device =
@@ -174,6 +176,19 @@ wrapColorCircle color content =
         ]
         <| content
 
+
+makeNavbarLink label_ msg_ =
+    EInput.button
+        [
+        ]
+        { onPress = Just msg_
+        , label = E.el 
+            [
+            ]
+            <| E.text label_
+        }
+
+
 aboutMeText =
     [ E.paragraph
         [
@@ -187,5 +202,6 @@ aboutMeText =
         ]
     ]
 
-
-
+latestWorkSectionId = "latest-work-section"
+aboutMeSectionId = "about-me-section"
+contactMeSectionId = "contact-me-section"
