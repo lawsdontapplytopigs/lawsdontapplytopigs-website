@@ -30,7 +30,7 @@ color3 = E.rgb255 138 100 120
 color4 = E.rgb255 170 120 134
 color5 = E.rgb255 200 160 174
 color6 = E.rgb255 228 180 188
-color7 = E.rgb255 255 228 234
+color7 = E.rgb255 255 230 234
 black = E.rgb255 0 0 0
 white = E.rgb255 255 255 255
 
