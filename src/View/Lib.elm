@@ -200,6 +200,18 @@ aboutMeText =
         ]
         [ E.text """I love challenges and getting out of my comfort zone. In the future I would like to work more with backend technologies and eventually I would love to work with machine learning, AI, statistical analysis, data visualization or related fields."""
         ]
+    , E.paragraph
+        [
+        ]
+        [ E.text "(In case you're wondering, the name comes from "
+        , E.newTabLink
+            [ EFont.medium
+            ]
+            { url = "https://www.imdb.com/title/tt0104652/?ref_=fn_al_tt_1"
+            , label = E.text "Porco Rosso"
+            }
+        , E.text ".)"
+        ]
     ]
 
 latestWorkSectionId = "latest-work-section"
