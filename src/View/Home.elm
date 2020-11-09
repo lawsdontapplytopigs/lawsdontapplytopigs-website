@@ -119,18 +119,18 @@ mainCol model =
                         [ E.spacing 10
                         , E.paddingEach { top = 80, right = 0, bottom = 0, left = 0 }
                         ]
-                        [ E.paragraph
-                            [ EFont.family
-                                [ EFont.typeface Palette.font1
-                                ]
-                            -- , EFont.color Palette.color1
-                            , EFont.size 42
-                            , EFont.regular
-                            , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
-                            ]
-                            [ E.text "Available for hire!"
-                            ]
-                        , E.row
+                        -- [ E.paragraph
+                        --     [ EFont.family
+                        --         [ EFont.typeface Palette.font1
+                        --         ]
+                        --     -- , EFont.color Palette.color1
+                        --     , EFont.size 42
+                        --     , EFont.regular
+                        --     , E.htmlAttribute <| Html.Attributes.style "text-transform" "uppercase"
+                        --     ]
+                        --     [ E.text "Available for hire!"
+                        --     ]
+                        [ E.row
                             [ EFont.size Palette.fontSize0
                             , EFont.medium
                             , E.spacing Palette.spacing0
